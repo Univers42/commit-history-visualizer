@@ -43,7 +43,10 @@ def sync_repository(config: ProjectConfig, name: str) -> None:
 
 
 def main() -> int:
-    """Clone or update every repository in the configuration. Returns 1 when any repository fails."""
+    """
+    Clone or update every repository in the configuration.
+    Returns 1 when any repository fails.
+    """
     args = parse_args()
     try:
         config = load_config(Path(args.config) if args.config else None)

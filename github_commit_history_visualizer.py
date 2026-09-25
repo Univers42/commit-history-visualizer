@@ -69,6 +69,28 @@ class ChartSlice:
     color: Optional[str] = None
 
 
+@dataclass(frozen=True)
+class DonutRing:
+    """Geometry of the donut chart, in SVG user units."""
+
+    center_x: float
+    center_y: float
+    outer_radius: float
+    inner_radius: float
+
+
+@dataclass(frozen=True)
+class CircleChartOptions:
+    """Labels and coloring for one circular chart."""
+
+    center_value: str
+    center_label: str
+    empty_message: str
+    aria_label: str
+    format_value: Callable[[int, float], str]
+    hue_offset: float = 172.0
+
+
 LANGUAGE_COLORS = {
     "Assembly": "#6E4C13",
     "C": "#555555",
@@ -422,39 +444,43 @@ def _polar(center_x: float, center_y: float, radius: float, angle_deg: float) ->
     )
 
 
-def _donut_slice_path(
-    center_x: float,
-    center_y: float,
-    outer_radius: float,
-    inner_radius: float,
-    start_angle: float,
-    end_angle: float,
-) -> str:
+def _full_ring_path(ring: DonutRing) -> str:
+    """Build an SVG path for a donut that covers the whole circle."""
+    return (
+        f"M {ring.center_x:.3f} {ring.center_y - ring.outer_radius:.3f} "
+        f"A {ring.outer_radius:.3f} {ring.outer_radius:.3f} 0 1 1 "
+        f"{ring.center_x:.3f} {ring.center_y + ring.outer_radius:.3f} "
+        f"A {ring.outer_radius:.3f} {ring.outer_radius:.3f} 0 1 1 "
+        f"{ring.center_x:.3f} {ring.center_y - ring.outer_radius:.3f} "
+        f"M {ring.center_x:.3f} {ring.center_y - ring.inner_radius:.3f} "
+        f"A {ring.inner_radius:.3f} {ring.inner_radius:.3f} 0 1 0 "
+        f"{ring.center_x:.3f} {ring.center_y + ring.inner_radius:.3f} "
+        f"A {ring.inner_radius:.3f} {ring.inner_radius:.3f} 0 1 0 "
+        f"{ring.center_x:.3f} {ring.center_y - ring.inner_radius:.3f} "
+        "Z"
+    )
+
+
+def _donut_slice_path(ring: DonutRing, start_angle: float, end_angle: float) -> str:
     """
     Build an SVG path for a single donut slice.
     """
     sweep = end_angle - start_angle
     if sweep >= 359.999:
-        return (
-            f"M {center_x:.3f} {center_y - outer_radius:.3f} "
-            f"A {outer_radius:.3f} {outer_radius:.3f} 0 1 1 {center_x:.3f} {center_y + outer_radius:.3f} "
-            f"A {outer_radius:.3f} {outer_radius:.3f} 0 1 1 {center_x:.3f} {center_y - outer_radius:.3f} "
-            f"M {center_x:.3f} {center_y - inner_radius:.3f} "
-            f"A {inner_radius:.3f} {inner_radius:.3f} 0 1 0 {center_x:.3f} {center_y + inner_radius:.3f} "
-            f"A {inner_radius:.3f} {inner_radius:.3f} 0 1 0 {center_x:.3f} {center_y - inner_radius:.3f} "
-            "Z"
-        )
+        return _full_ring_path(ring)
 
     large_arc = 1 if sweep > 180 else 0
-    outer_start = _polar(center_x, center_y, outer_radius, start_angle)
-    outer_end = _polar(center_x, center_y, outer_radius, end_angle)
-    inner_end = _polar(center_x, center_y, inner_radius, end_angle)
-    inner_start = _polar(center_x, center_y, inner_radius, start_angle)
+    outer_start = _polar(ring.center_x, ring.center_y, ring.outer_radius, start_angle)
+    outer_end = _polar(ring.center_x, ring.center_y, ring.outer_radius, end_angle)
+    inner_end = _polar(ring.center_x, ring.center_y, ring.inner_radius, end_angle)
+    inner_start = _polar(ring.center_x, ring.center_y, ring.inner_radius, start_angle)
     return (
         f"M {outer_start[0]:.3f} {outer_start[1]:.3f} "
-        f"A {outer_radius:.3f} {outer_radius:.3f} 0 {large_arc} 1 {outer_end[0]:.3f} {outer_end[1]:.3f} "
+        f"A {ring.outer_radius:.3f} {ring.outer_radius:.3f} 0 {large_arc} 1 "
+        f"{outer_end[0]:.3f} {outer_end[1]:.3f} "
         f"L {inner_end[0]:.3f} {inner_end[1]:.3f} "
-        f"A {inner_radius:.3f} {inner_radius:.3f} 0 {large_arc} 0 {inner_start[0]:.3f} {inner_start[1]:.3f} "
+        f"A {ring.inner_radius:.3f} {ring.inner_radius:.3f} 0 {large_arc} 0 "
+        f"{inner_start[0]:.3f} {inner_start[1]:.3f} "
         "Z"
     )
 
@@ -482,70 +508,88 @@ def format_bytes(byte_count: int) -> str:
     return f"{value:.1f} {units[unit_index]}"
 
 
-def render_circle_chart(
-    slices: List[ChartSlice],
-    *,
-    center_value: str,
-    center_label: str,
-    empty_message: str,
-    aria_label: str,
-    format_value: Callable[[int, float], str],
-    hue_offset: float = 172.0,
-) -> str:
-    """
-    Render an SVG circular (donut) chart for the given slices.
-    """
-    if not slices:
-        return f'<p class="empty">{html.escape(empty_message)}</p>'
+@dataclass(frozen=True)
+class SliceSpan:
+    """Position of one slice within a circular chart."""
 
-    total = sum(item.value for item in slices)
-    if total == 0:
-        return f'<p class="empty">{html.escape(empty_message)}</p>'
+    index: int
+    total: int
+    start_angle: float
+    end_angle: float
 
-    center_x = 180.0
-    center_y = 180.0
-    outer_radius = 150.0
-    inner_radius = 82.0
-    current_angle = 0.0
-    paths = []
-    legend_items = []
 
-    for index, item in enumerate(slices):
-        sweep = (item.value / total) * 360
-        end_angle = 360.0 if index == len(slices) - 1 else current_angle + sweep
-        color = item.color or _slice_color(index, hue_offset)
-        percent = (item.value / total) * 100
-        label = html.escape(item.label)
-        detail = f" {html.escape(item.detail)}" if item.detail else ""
-        paths.append(
-            f'<path d="{_donut_slice_path(center_x, center_y, outer_radius, inner_radius, current_angle, end_angle)}" '
-            f'fill="{color}" stroke="#fffdf8" stroke-width="2">'
-            f"<title>{label}: {format_value(item.value, percent)}{detail}</title>"
-            "</path>"
-        )
-        legend_items.append(
-            f"""
+def _chart_piece(
+    ring: DonutRing,
+    item: ChartSlice,
+    span: SliceSpan,
+    options: CircleChartOptions,
+) -> tuple[str, str]:
+    """Return the SVG path and legend item for one chart slice."""
+    color = item.color or _slice_color(span.index, options.hue_offset)
+    percent = (item.value / span.total) * 100
+    label = html.escape(item.label)
+    detail = f" {html.escape(item.detail)}" if item.detail else ""
+    value_label = html.escape(options.format_value(item.value, percent))
+    path = (
+        f'<path d="{_donut_slice_path(ring, span.start_angle, span.end_angle)}" '
+        f'fill="{color}" stroke="#fffdf8" stroke-width="2">'
+        f"<title>{label}: {options.format_value(item.value, percent)}{detail}</title>"
+        "</path>"
+    )
+    legend = f"""
             <li>
                 <span class="legend-swatch" style="background:{color}"></span>
                 <span class="legend-name">{label}</span>
-                <span class="legend-value">{html.escape(format_value(item.value, percent))}</span>
+                <span class="legend-value">{value_label}</span>
             </li>
             """
-        )
-        current_angle = end_angle
+    return path, legend
 
+
+def _assemble_chart(
+    ring: DonutRing,
+    options: CircleChartOptions,
+    paths: List[str],
+    legend_items: List[str],
+) -> str:
+    """Wrap chart paths and legend items in the report markup."""
     return f"""
     <div class="chart-layout">
-        <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="{html.escape(aria_label)}">
+        <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="{html.escape(options.aria_label)}">
             {"".join(paths)}
-            <text x="{center_x}" y="{center_y - 10}" class="pie-center-value">{html.escape(center_value)}</text>
-            <text x="{center_x}" y="{center_y + 16}" class="pie-center-label">{html.escape(center_label)}</text>
+            <text x="{ring.center_x}" y="{ring.center_y - 10}" class="pie-center-value">{html.escape(options.center_value)}</text>
+            <text x="{ring.center_x}" y="{ring.center_y + 16}" class="pie-center-label">{html.escape(options.center_label)}</text>
         </svg>
         <ul class="chart-legend">
             {"".join(legend_items)}
         </ul>
     </div>
     """
+
+
+def render_circle_chart(slices: List[ChartSlice], options: CircleChartOptions) -> str:
+    """
+    Render an SVG circular (donut) chart for the given slices.
+    """
+    total = sum(item.value for item in slices)
+    if not slices or total == 0:
+        return f'<p class="empty">{html.escape(options.empty_message)}</p>'
+
+    ring = DonutRing(180.0, 180.0, 150.0, 82.0)
+    paths = []
+    legend_items = []
+    current_angle = 0.0
+
+    for index, item in enumerate(slices):
+        sweep = (item.value / total) * 360
+        end_angle = 360.0 if index == len(slices) - 1 else current_angle + sweep
+        span = SliceSpan(index, total, current_angle, end_angle)
+        path, legend = _chart_piece(ring, item, span, options)
+        paths.append(path)
+        legend_items.append(legend)
+        current_angle = end_angle
+
+    return _assemble_chart(ring, options, paths, legend_items)
 
 
 def render_committer_chart(committers: List[CommitterCount]) -> str:
@@ -560,12 +604,14 @@ def render_committer_chart(committers: List[CommitterCount]) -> str:
     total = sum(item.value for item in slices)
     return render_circle_chart(
         slices,
-        center_value=str(total),
-        center_label="commits",
-        empty_message="No committer counts stored for this repository.",
-        aria_label="Commit counts per committer",
-        format_value=lambda value, percent: f"{value} ({percent:.1f}%)",
-        hue_offset=172.0,
+        CircleChartOptions(
+            center_value=str(total),
+            center_label="commits",
+            empty_message="No committer counts stored for this repository.",
+            aria_label="Commit counts per committer",
+            format_value=lambda value, percent: f"{value} ({percent:.1f}%)",
+            hue_offset=172.0,
+        ),
     )
 
 
@@ -586,12 +632,14 @@ def render_language_chart(languages: List[LanguageCount]) -> str:
     total = sum(item.value for item in slices)
     return render_circle_chart(
         slices,
-        center_value=format_bytes(total) if total else "0 B",
-        center_label="code",
-        empty_message="No language data stored for this repository.",
-        aria_label="Language usage by bytes of code",
-        format_value=lambda value, percent: f"{format_bytes(value)} ({percent:.1f}%)",
-        hue_offset=28.0,
+        CircleChartOptions(
+            center_value=format_bytes(total) if total else "0 B",
+            center_label="code",
+            empty_message="No language data stored for this repository.",
+            aria_label="Language usage by bytes of code",
+            format_value=lambda value, percent: f"{format_bytes(value)} ({percent:.1f}%)",
+            hue_offset=28.0,
+        ),
     )
 
 
@@ -663,6 +711,7 @@ def render_html(
     contributor_summary_card = render_contributor_summary_card(connection, config)
     report_title = html.escape(config.title)
     report_description = html.escape(config.description)
+    stylesheet = Path(__file__).with_name("report.css").read_text(encoding="utf-8")
 
     return f"""<!doctype html>
 <html lang="en">
@@ -671,298 +720,7 @@ def render_html(
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{report_title}</title>
     <style>
-        :root {{
-            color-scheme: light;
-            --bg: #f5f1e8;
-            --panel: #fffdf8;
-            --ink: #1f2933;
-            --muted: #65717e;
-            --accent: #0f766e;
-            --accent-soft: #d6f0ec;
-            --warning: #b45309;
-            --warning-soft: #fef3c7;
-            --error: #b91c1c;
-            --error-soft: #fee2e2;
-            --border: #e6ddd0;
-            --shadow: 0 20px 45px rgba(31, 41, 51, 0.08);
-        }}
-        body {{
-            margin: 0;
-            font-family: Georgia, "Times New Roman", serif;
-            color: var(--ink);
-            background: radial-gradient(circle at top, #fff8ea 0, var(--bg) 48%, #efe7db 100%);
-        }}
-        .page {{
-            max-width: 1180px;
-            margin: 0 auto;
-            padding: 32px 20px 56px;
-        }}
-        .hero {{
-            background: linear-gradient(135deg, #173f5f 0%, #0f766e 100%);
-            color: white;
-            border-radius: 24px;
-            padding: 30px 32px;
-            box-shadow: var(--shadow);
-        }}
-        .hero h1 {{
-            margin: 0 0 10px;
-            font-size: clamp(2rem, 4vw, 3.6rem);
-            letter-spacing: -0.03em;
-        }}
-        .hero p {{
-            margin: 0;
-            max-width: 64ch;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.88);
-        }}
-        .summary-card {{
-            margin: 18px 0 30px;
-            padding: 22px 24px;
-            background: linear-gradient(180deg, #ffffff 0%, #fffaf1 100%);
-            border: 1px solid var(--border);
-            border-radius: 22px;
-            box-shadow: var(--shadow);
-        }}
-        .summary-header {{
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 16px;
-            margin-bottom: 18px;
-        }}
-        .summary-header h2 {{
-            margin: 0;
-            font-size: 1.45rem;
-        }}
-        .eyebrow {{
-            margin: 0 0 6px;
-            color: var(--accent);
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-        }}
-        .summary-total {{
-            min-width: 160px;
-            padding: 14px 16px;
-            border-radius: 18px;
-            background: var(--accent-soft);
-            border: 1px solid rgba(15, 118, 110, 0.12);
-            text-align: right;
-        }}
-        .summary-total .label {{
-            display: block;
-            color: var(--muted);
-            font-size: 0.9rem;
-        }}
-        .summary-total strong {{
-            display: block;
-            margin-top: 6px;
-            font-size: 1.8rem;
-            color: var(--accent);
-        }}
-        .contributor-list {{
-            margin: 0;
-            padding: 0;
-            list-style: none;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px;
-        }}
-        .contributor-list li {{
-            padding: 14px 16px;
-            border-radius: 18px;
-            background: #faf7f0;
-            border: 1px solid var(--border);
-            display: grid;
-            gap: 4px;
-        }}
-        .contributor-list li strong {{
-            font-size: 1rem;
-        }}
-        .contributor-list li span {{
-            color: var(--muted);
-            font-size: 0.93rem;
-            line-height: 1.4;
-        }}
-        .contributor-list li .members {{
-            display: block;
-            font-size: 0.88rem;
-            margin: 2px 0;
-            color: var(--accent);
-        }}
-        .contributor-list li.highlighted {{
-            background: var(--accent-soft);
-            border-color: var(--accent);
-            box-shadow: inset 4px 0 0 var(--accent);
-        }}
-        .contributor-list li.highlighted strong {{
-            color: var(--accent);
-        }}
-        .overview {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin: 22px 0 30px;
-        }}
-        .overview .tile, .repo-card {{
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 22px;
-            box-shadow: var(--shadow);
-        }}
-        .overview .tile {{
-            padding: 18px 20px;
-        }}
-        .overview .tile .label, .stats .label, .meta {{
-            color: var(--muted);
-        }}
-        .overview .tile strong, .stats strong {{
-            display: block;
-            font-size: 1.7rem;
-            margin-top: 6px;
-        }}
-        .repo-card {{
-            padding: 22px 24px 18px;
-            margin-bottom: 18px;
-        }}
-        .repo-card header {{
-            display: flex;
-            gap: 14px;
-            align-items: flex-start;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }}
-        .repo-card h2 {{
-            margin: 0;
-            font-size: 1.45rem;
-        }}
-        .meta {{
-            margin: 6px 0 0;
-            font-size: 0.95rem;
-        }}
-        .status {{
-            display: inline-flex;
-            align-items: center;
-            padding: 8px 12px;
-            border-radius: 999px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }}
-        .status-success {{ background: var(--accent-soft); color: var(--accent); }}
-        .status-error {{ background: var(--error-soft); color: var(--error); }}
-        .stats {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 12px;
-            margin-bottom: 14px;
-        }}
-        .stats div {{
-            background: #faf7f0;
-            border-radius: 18px;
-            padding: 14px 16px;
-            border: 1px solid var(--border);
-        }}
-        .chart-layout {{
-            display: grid;
-            grid-template-columns: minmax(140px, 210px) minmax(0, 1fr);
-            gap: 14px 16px;
-            align-items: center;
-        }}
-        .repo-charts {{
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px 28px;
-            align-items: start;
-        }}
-        .chart-panel h3 {{
-            margin: 0 0 12px;
-            font-size: 1.05rem;
-        }}
-        .pie-chart {{
-            width: 100%;
-            max-width: 210px;
-            height: auto;
-            overflow: visible;
-        }}
-        .pie-center-value {{
-            fill: var(--ink);
-            font-size: 22px;
-            font-weight: 700;
-            text-anchor: middle;
-            dominant-baseline: middle;
-        }}
-        .pie-center-label {{
-            fill: var(--muted);
-            font-size: 13px;
-            text-anchor: middle;
-            dominant-baseline: middle;
-        }}
-        .chart-legend {{
-            margin: 0;
-            padding: 0;
-            list-style: none;
-            display: grid;
-            gap: 8px;
-            max-height: 320px;
-            overflow: auto;
-        }}
-        .chart-legend li {{
-            display: grid;
-            grid-template-columns: 12px minmax(0, 1fr) auto;
-            gap: 10px;
-            align-items: center;
-        }}
-        .legend-swatch {{
-            width: 12px;
-            height: 12px;
-            border-radius: 999px;
-        }}
-        .legend-name {{
-            color: var(--ink);
-            font-size: 0.95rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }}
-        .legend-value {{
-            color: var(--muted);
-            font-size: 0.9rem;
-            white-space: nowrap;
-        }}
-        .empty, .error {{ margin: 0; line-height: 1.6; }}
-        .error {{
-            margin-bottom: 12px;
-            padding: 12px 14px;
-            border-radius: 14px;
-            background: var(--error-soft);
-            color: var(--error);
-        }}
-        .footer {{
-            margin-top: 28px;
-            color: var(--muted);
-            font-size: 0.95rem;
-        }}
-        @media (max-width: 980px) {{
-            .repo-charts {{
-                grid-template-columns: 1fr;
-            }}
-        }}
-        @media (max-width: 720px) {{
-            .hero, .repo-card {{ padding-left: 18px; padding-right: 18px; }}
-            .repo-card header {{ flex-direction: column; }}
-            .status {{ align-self: flex-start; }}
-            .chart-layout {{
-                grid-template-columns: 1fr;
-                justify-items: center;
-            }}
-            .chart-legend {{
-                width: 100%;
-                max-height: none;
-            }}
-        }}
+{stylesheet}
     </style>
 </head>
 <body>

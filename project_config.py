@@ -23,20 +23,74 @@ class ContributorGroup:
 
 
 @dataclass(frozen=True)
-class ProjectConfig:
-    """Settings that adapt the tools to one set of repositories and users."""
+class CloneSettings:
+    """Where local checkouts come from and which branch they track."""
 
-    source: Path
+    remote: str
+    directory: Path
+    branch: str
+
+
+@dataclass(frozen=True)
+class ReportSettings:
+    """Names and output paths used by the HTML report."""
+
     name: str
     title: str
     description: str
     database: Path
     report: Path
-    clone_remote: str
-    clone_directory: Path
-    clone_branch: str
+
+
+@dataclass(frozen=True)
+class ProjectConfig:
+    """Settings that adapt the tools to one set of repositories and users."""
+
+    source: Path
+    report_settings: ReportSettings
+    clone: CloneSettings
     repositories: tuple[str, ...]
     groups: tuple[ContributorGroup, ...]
+
+    @property
+    def name(self) -> str:
+        """Project name shown in configuration errors and defaults."""
+        return self.report_settings.name
+
+    @property
+    def title(self) -> str:
+        """Heading used on the HTML report."""
+        return self.report_settings.title
+
+    @property
+    def description(self) -> str:
+        """Intro text used on the HTML report."""
+        return self.report_settings.description
+
+    @property
+    def database(self) -> Path:
+        """SQLite database written by the collector."""
+        return self.report_settings.database
+
+    @property
+    def report(self) -> Path:
+        """HTML report written by the visualizer."""
+        return self.report_settings.report
+
+    @property
+    def clone_remote(self) -> str:
+        """Git remote that hosts the configured repositories."""
+        return self.clone.remote
+
+    @property
+    def clone_directory(self) -> Path:
+        """Directory that holds local checkouts."""
+        return self.clone.directory
+
+    @property
+    def clone_branch(self) -> str:
+        """Branch checked out and updated for each repository."""
+        return self.clone.branch
 
     def repository_paths(self) -> list[Path]:
         """Return the local checkout path for every configured repository."""
@@ -96,14 +150,18 @@ def _parse_config(source: Path, raw: dict) -> ProjectConfig:
 
     return ProjectConfig(
         source=source,
-        name=name,
-        title=title,
-        description=description,
-        database=database,
-        report=report,
-        clone_remote=clone_remote,
-        clone_directory=clone_directory,
-        clone_branch=clone_branch,
+        report_settings=ReportSettings(
+            name=name,
+            title=title,
+            description=description,
+            database=database,
+            report=report,
+        ),
+        clone=CloneSettings(
+            remote=clone_remote,
+            directory=clone_directory,
+            branch=clone_branch,
+        ),
         repositories=repositories,
         groups=groups,
     )
