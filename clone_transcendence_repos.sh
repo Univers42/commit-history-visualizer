@@ -1,16 +1,27 @@
 #!/usr/bin/bash
 
-mkdir -p ~/projects/transcendence
-cd ~/projects/transcendence || exit 0
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+list_file="$script_dir/transcendence_local.txt"
 
+if [[ ! -f "$list_file" ]]; then
+  echo "Missing list file: $list_file" >&2
+  exit 1
+fi
 
+while IFS= read -r line || [[ -n "$line" ]]; do
+  line="${line#"${line%%[![:space:]]*}"}"
+  line="${line%"${line##*[![:space:]]}"}"
+  [[ -z "$line" || "$line" == \#* ]] && continue
 
-for repo in "${repositories[@]}"; do
-  if [ -d "$repo" ]; then
-    cd "$repo" || exit 0
-    git pull --rebase origin main
-    cd ..
+  repo_path="${line/#\~/$HOME}"
+  repo_name="$(basename "$repo_path")"
+  parent_dir="$(dirname "$repo_path")"
+
+  mkdir -p "$parent_dir" || exit 1
+
+  if [[ -d "$repo_path" ]]; then
+    git -C "$repo_path" pull --rebase origin main
   else
-    git clone "git@github.com:Univers42/$repo"
+    git clone "https://github.com/Univers42/${repo_name}.git" "$repo_path"
   fi
-done
+done < "$list_file"
