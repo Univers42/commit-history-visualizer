@@ -133,11 +133,13 @@ class GroupSummary:
 
 
 CONTRIBUTOR_GROUPS = {
-    "vjan-nie": ["Vado", "vjan-nie"],
+    "vjan-nie": ["Vado", "vjan-nie", "Vadim Jan Nieto"],
     "rstancu": ["settes"],
     "serjimen": ["serjimen", "DJSurgeon"],
-    "dlesieur": ["LESdylan", "dlesieur"],
+    "dlesieur": ["LESdylan", "dlesieur", "Dylan Lesieur", "dylan51100", "dylan", "dyles42"],
     "danfern3": ["danielfdez17"],
+    "SMOSTAFAH1": ["SMOSTAFAH1"],
+    "alcacere": ["alcacere", "Alex Caceres"],
     "GitHub": ["GitHub"],
     "AI Assistant": ["AI Assistant"],
     "test": ["test"],
@@ -147,6 +149,15 @@ GROUP_BY_MEMBER = {
     member.lower(): group
     for group, members in CONTRIBUTOR_GROUPS.items()
     for member in members
+}
+
+HIGHLIGHTED_CONTRIBUTOR_GROUPS = {
+    "vjan-nie",
+    "serjime",
+    "serjimen",
+    "dlesieur",
+    "danfern3",
+    "smostafah1",
 }
 
 
@@ -367,6 +378,15 @@ def status_badge(status: str) -> str:
     return f'<span class="status status-{html.escape(status)}">{label}</span>'
 
 
+def contributor_highlight_attribute(group_name: str) -> str:
+    """
+    Return a class attribute for contributor groups that should stand out in the summary.
+    """
+    if group_name.lower() in HIGHLIGHTED_CONTRIBUTOR_GROUPS:
+        return ' class="highlighted"'
+    return ""
+
+
 def render_contributor_summary_card(connection: sqlite3.Connection) -> str:
     """
     Render an HTML card summarizing the contributors across all repositories,
@@ -381,7 +401,7 @@ def render_contributor_summary_card(connection: sqlite3.Connection) -> str:
     else:
         contributor_items = "".join(
             f"""
-            <li>
+            <li{contributor_highlight_attribute(group.group_name)}>
                 <strong>{html.escape(group.group_name)}</strong>
                 <span class=\"members\">{html.escape(', '.join(group.members))}</span>
                 <span>{group.commit_total} commits across {group.repository_total} repositories</span>
@@ -781,6 +801,14 @@ def render_html(
             display: block;
             font-size: 0.88rem;
             margin: 2px 0;
+            color: var(--accent);
+        }}
+        .contributor-list li.highlighted {{
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            box-shadow: inset 4px 0 0 var(--accent);
+        }}
+        .contributor-list li.highlighted strong {{
             color: var(--accent);
         }}
         .overview {{

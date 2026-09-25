@@ -191,6 +191,21 @@ def collect_input_repositories(args: argparse.Namespace) -> list[str]:
     raise ValueError("You must provide repositories with --repos-file or as positional arguments.")
 
 
+def recreate_database(db_path: str) -> None:
+    """
+    Remove an existing SQLite database and its sidecar files so the next run starts empty.
+    """
+    database_path = Path(db_path)
+    for candidate in (
+        database_path,
+        Path(f"{db_path}-wal"),
+        Path(f"{db_path}-shm"),
+        Path(f"{db_path}-journal"),
+    ):
+        if candidate.is_file():
+            candidate.unlink()
+
+
 def ensure_schema(connection: sqlite3.Connection) -> None:
     """
     Ensure the database schema exists. Creates tables if they do not exist.
@@ -608,7 +623,11 @@ def main() -> int:
         return 1
 
     try:
+        recreate_database(args.db)
         connection = sqlite3.connect(args.db)
+    except OSError as error:
+        print(f"Unable to recreate database '{args.db}': {error}")
+        return 1
     except sqlite3.Error as error:
         print(f"Unable to open database '{args.db}': {error}")
         return 1
