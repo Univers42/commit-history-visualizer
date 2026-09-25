@@ -73,16 +73,24 @@ help: ## Show available targets
 	@echo ""
 
 # ── Utils ────────────────────────────────────────────────────────────────
+.PHONY: clone-repositories
+clone-repositories: ## Clone the repositories listed in config.toml
+	@$(call print_banner,Cloning Repositories)
+	@./clone_repositories.sh
+	@$(call print_success,Repositories cloned successfully!)
+
 .PHONY: clone-transcendence-repositories
-clone-transcendence-repositories: ## Clone all Transcendence repositories listed in transcendence_local.txt
-	@$(call print_banner,Cloning Transcendence Repositories)
-	@./clone_transcendence_repos.sh
-	@$(call print_success,Transcendence repositories cloned successfully!)
+clone-transcendence-repositories: clone-repositories
 
 .PHONY: collect-git-commit-history
-collect-git-commit-history: ## Collect git commit history into a file
-	@$(MAKE) -s clone-transcendence-repositories
+collect-git-commit-history: ## Collect commit history for the repositories in config.toml
+	@$(MAKE) -s clone-repositories
 	@$(call print_banner,Collecting Git Commit History)
 	@./create_commit_history.sh
 	@$(call print_success,Git commit history collected successfully!)
 
+.PHONY: lint ## Lint all Python scripts in the repository
+lint:
+	@$(call print_banner,Linting Python Scripts)
+	@./scripts/python/lint_python_scripts.py
+	@$(call print_success,Python scripts linted successfully!)

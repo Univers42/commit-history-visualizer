@@ -1,0 +1,103 @@
+# Settings for one commit-history project. Paths are relative to this file.
+# Point the tools at another file with --config.
+
+name = "Transcendence"
+title = "Transcendence Commit History"
+description = "This report visualizes the repository history stored in the SQLite database, with per-repository totals and circular charts for committers and languages."
+database = "commits.sqlite3"
+report = "github_commit_history_report.html"
+
+# Repository names on the remote. Each one is checked out under clone.directory.
+repositories = [
+  "42ctl",
+  "adapter-registry-api",
+  "bob",
+  "born2root",
+  "cc1",
+  "DoD",
+  "draw-engine",
+  "drawnosaurus",
+  "email-api",
+  "formula-engine",
+  "grobase",
+  "groot",
+  "hellish",
+  "hellishrc_plugins",
+  "laboratory",
+  "libcss",
+  "libft",
+  "markdown-engine",
+  "markengine",
+  "mini-baas",
+  "mini-baas-sdk",
+  "mongo-api",
+  "monkey-bot",
+  "notion-database-sys",
+  "osionos",
+  "osionos-calendar",
+  "osionos-canvas",
+  "osionos-mail",
+  "osionos-ui",
+  "prismatica",
+  "prismatica-landing",
+  "QA",
+  "realtime-agnostic",
+  "scripts",
+  "storage-router-api",
+  "transcendence",
+  "UI-Collection",
+  "vault42",
+]
+
+[clone]
+remote = "https://github.com/Univers42"
+directory = "./transcendence"
+branch = "main"
+
+# People who commit under more than one name. The group name is always matched,
+# and members add further aliases. Matching is case-insensitive.
+# highlight = true marks the group in the Contributor Summary.
+[[groups]]
+name = "vjan-nie"
+members = ["Vado", "Vadim Jan Nieto"]
+highlight = true
+
+[[groups]]
+name = "rstancu"
+members = ["settes"]
+
+[[groups]]
+name = "serjimen"
+members = ["serjime", "DJSurgeon"]
+highlight = true
+
+[[groups]]
+name = "dlesieur"
+members = ["LESdylan", "Dylan Lesieur", "dylan51100", "dylan", "dyles42"]
+highlight = true
+
+[[groups]]
+name = "danfern3"
+members = ["danielfdez17"]
+highlight = true
+
+[[groups]]
+name = "SMOSTAFAH1"
+members = []
+highlight = true
+
+[[groups]]
+name = "alcacere"
+members = ["Alex Caceres"]
+
+[[groups]]
+name = "GitHub"
+members = []
+
+[[groups]]
+name = "AI Assistant"
+members = []
+
+[[groups]]
+name = "test"
+members = []

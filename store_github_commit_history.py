@@ -2,15 +2,17 @@
 
 """Collect commit history from local Git repositories into SQLite.
 
-The script accepts local repository paths either as positional arguments or
-through a text file, stores commit history in SQLite, keeps per-committer
-and per-language counts, and generates the HTML report after collection finishes.
+The script accepts local repository paths from the project configuration, as
+positional arguments, or through a text file. It stores commit history in
+SQLite, keeps per-committer and per-language counts, and generates the HTML
+report after collection finishes.
 """
 
 import argparse
 import sqlite3
 import subprocess
 import sys
+import tomllib
 import webbrowser
 from collections import defaultdict
 from dataclasses import dataclass
@@ -18,9 +20,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import DefaultDict, Optional, Tuple
 
+from project_config import load_config
 
-DEFAULT_DB_PATH = "github_commit_history.sqlite3"
-DEFAULT_REPORT_PATH = "github_commit_history_report.html"
+
 GIT_LOG_FORMAT = "%H%x1f%cn%x1f%ce%x1f%cd%x1f%an%x1f%ae%x1f%ad%x1f%s"
 GIT_LOG_SEPARATOR = "\x1f"
 
@@ -140,7 +142,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "repos",
         nargs="*",
-        help="Local repository paths. You can also provide them through --repos-file.",
+        help="Local repository paths. Defaults to the repositories in the configuration file.",
+    )
+    parser.add_argument(
+        "--config",
+        help="Path to the project configuration file (default: config.toml next to this script).",
     )
     parser.add_argument(
         "--repos-file",
@@ -151,13 +157,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--db",
-        default=DEFAULT_DB_PATH,
-        help=f"Path to the SQLite database file (default: {DEFAULT_DB_PATH}).",
+        help="Path to the SQLite database file (default: the database path in the configuration).",
     )
     parser.add_argument(
         "--report-output",
-        default=DEFAULT_REPORT_PATH,
-        help=f"Path to the HTML report to generate (default: {DEFAULT_REPORT_PATH}).",
+        help="Path to the HTML report to generate (default: the report path in the configuration).",
     )
     return parser.parse_args()
 
@@ -179,16 +183,22 @@ def load_repositories_from_file(file_path: str) -> list[str]:
     return repositories
 
 
-def collect_input_repositories(args: argparse.Namespace) -> list[str]:
+def collect_input_repositories(args: argparse.Namespace, config) -> list[str]:
     """
-    Collect the list of repository paths from command-line arguments or a file.
+    Collect the list of repository paths from command-line arguments, a file, or the configuration.
     Raises ValueError if no repositories are provided.
     """
     if args.repos:
         return list(args.repos)
     if args.repos_file:
         return load_repositories_from_file(args.repos_file)
-    raise ValueError("You must provide repositories with --repos-file or as positional arguments.")
+    paths = [str(path) for path in config.repository_paths()]
+    if not paths:
+        raise ValueError(
+            "You must provide repositories in the configuration, with --repos-file, "
+            "or as positional arguments."
+        )
+    return paths
 
 
 def recreate_database(db_path: str) -> None:
@@ -587,7 +597,7 @@ def store_repository(connection: sqlite3.Connection, repository_reference: str) 
         return False
 
 
-def generate_report(db_path: str, report_output: str) -> None:
+def generate_report(db_path: str, report_output: str, config_path: str) -> None:
     """
     Generate the HTML report by running the visualization script and open it in a browser.
     """
@@ -596,6 +606,8 @@ def generate_report(db_path: str, report_output: str) -> None:
         [
             sys.executable,
             str(report_script),
+            "--config",
+            config_path,
             "--db",
             db_path,
             "--output",
@@ -613,23 +625,27 @@ def main() -> int:
     """
     args = parse_args()
     try:
-        repositories = collect_input_repositories(args)
-    except (FileNotFoundError, ValueError) as error:
+        config = load_config(Path(args.config) if args.config else None)
+        repositories = collect_input_repositories(args, config)
+    except (FileNotFoundError, ValueError, OSError, tomllib.TOMLDecodeError) as error:
         print(error)
         return 1
+
+    database_path = args.db or str(config.database)
+    report_output = args.report_output or str(config.report)
 
     if not repositories:
         print("You must provide at least one repository.")
         return 1
 
     try:
-        recreate_database(args.db)
-        connection = sqlite3.connect(args.db)
+        recreate_database(database_path)
+        connection = sqlite3.connect(database_path)
     except OSError as error:
-        print(f"Unable to recreate database '{args.db}': {error}")
+        print(f"Unable to recreate database '{database_path}': {error}")
         return 1
     except sqlite3.Error as error:
-        print(f"Unable to open database '{args.db}': {error}")
+        print(f"Unable to open database '{database_path}': {error}")
         return 1
 
     success_count = 0
@@ -646,7 +662,7 @@ def main() -> int:
         connection.close()
 
     try:
-        generate_report(args.db, args.report_output)
+        generate_report(database_path, report_output, str(config.source))
     except subprocess.CalledProcessError as error:
         print(f"Failed to generate the HTML report: {error}")
     except (OSError, webbrowser.Error) as error:

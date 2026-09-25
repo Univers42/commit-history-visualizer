@@ -14,13 +14,12 @@ import html
 import math
 import sqlite3
 import sys
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, List, Optional
 
-
-DEFAULT_DB_PATH = "github_commit_history.sqlite3"
-DEFAULT_OUTPUT_PATH = "github_commit_history_report.html"
+from project_config import ProjectConfig, load_config
 
 
 @dataclass
@@ -132,35 +131,6 @@ class GroupSummary:
     members: List[str]
 
 
-CONTRIBUTOR_GROUPS = {
-    "vjan-nie": ["Vado", "vjan-nie", "Vadim Jan Nieto"],
-    "rstancu": ["settes"],
-    "serjimen": ["serjimen", "DJSurgeon"],
-    "dlesieur": ["LESdylan", "dlesieur", "Dylan Lesieur", "dylan51100", "dylan", "dyles42"],
-    "danfern3": ["danielfdez17"],
-    "SMOSTAFAH1": ["SMOSTAFAH1"],
-    "alcacere": ["alcacere", "Alex Caceres"],
-    "GitHub": ["GitHub"],
-    "AI Assistant": ["AI Assistant"],
-    "test": ["test"],
-}
-
-GROUP_BY_MEMBER = {
-    member.lower(): group
-    for group, members in CONTRIBUTOR_GROUPS.items()
-    for member in members
-}
-
-HIGHLIGHTED_CONTRIBUTOR_GROUPS = {
-    "vjan-nie",
-    "serjime",
-    "serjimen",
-    "dlesieur",
-    "danfern3",
-    "smostafah1",
-}
-
-
 def parse_args() -> argparse.Namespace:
     """
     Parse command-line arguments for the script.
@@ -169,14 +139,16 @@ def parse_args() -> argparse.Namespace:
         description="Create an HTML visualization for a GitHub commit history SQLite database."
     )
     parser.add_argument(
+        "--config",
+        help="Path to the project configuration file (default: config.toml next to this script).",
+    )
+    parser.add_argument(
         "--db",
-        default=DEFAULT_DB_PATH,
-        help=f"Path to the SQLite database file (default: {DEFAULT_DB_PATH}).",
+        help="Path to the SQLite database file (default: the database path in the configuration).",
     )
     parser.add_argument(
         "--output",
-        default=DEFAULT_OUTPUT_PATH,
-        help=f"Path to the HTML report to generate (default: {DEFAULT_OUTPUT_PATH}).",
+        help="Path to the HTML report to generate (default: the report path in the configuration).",
     )
     return parser.parse_args()
 
@@ -217,13 +189,17 @@ def repository_name(full_name: str) -> str:
     return name if name else full_name
 
 
-def aggregate_committers(rows: List[tuple[str, int]]) -> List[CommitterCount]:
+def aggregate_committers(
+    rows: List[tuple[str, int]],
+    config: ProjectConfig,
+) -> List[CommitterCount]:
     """
     Merge committers that share a display name or known alias, summing their commits.
     """
+    member_index = config.member_index()
     grouped: dict[str, list] = {}
     for committer_name, commit_count in rows:
-        group_name = GROUP_BY_MEMBER.get(committer_name.lower(), committer_name)
+        group_name = member_index.get(committer_name.lower(), committer_name)
         key = group_name.lower()
         entry = grouped.setdefault(key, [group_name, 0])
         entry[1] += commit_count
@@ -238,6 +214,7 @@ def aggregate_committers(rows: List[tuple[str, int]]) -> List[CommitterCount]:
 def load_committers(
     connection: sqlite3.Connection,
     repo_full_name: str,
+    config: ProjectConfig,
 ) -> List[CommitterCount]:
     """
     Load all committers for a given repository from the database, returning a list of
@@ -256,7 +233,7 @@ def load_committers(
         (repo_full_name,),
     ).fetchall()
 
-    return aggregate_committers(rows)
+    return aggregate_committers(rows, config)
 
 
 def table_exists(connection: sqlite3.Connection, table_name: str) -> bool:
@@ -304,7 +281,7 @@ def load_contributor_rows(
     """
     Load all contributor rows from the database, returning a list of tuples containing
     committer name, committer email, repository full name, and commit count. This data
-    will be used to group contributors by the defined groups in CONTRIBUTOR_GROUPS and
+    will be used to group contributors by the groups in the project configuration and
     to calculate totals for the contributor summary card. The results are ordered by committer
     name for consistent grouping.
     """
@@ -319,15 +296,17 @@ def load_contributor_rows(
 
 def group_contributors(
     rows: List[tuple[str, str, str, int]],
+    config: ProjectConfig,
 ) -> List[GroupSummary]:
     """
-    Group contributors by the defined groups in CONTRIBUTOR_GROUPS,
+    Group contributors by the groups in the project configuration,
     summing their commit counts and collecting the repositories they contributed to.
     Contributors not in any group are listed by their own name.
     """
+    member_index = config.member_index()
     grouped: dict[str, dict[str, object]] = {}
     for committer_name, _committer_email, repo_full_name, commit_count in rows:
-        group_name = GROUP_BY_MEMBER.get(committer_name.lower(), committer_name)
+        group_name = member_index.get(committer_name.lower(), committer_name)
         key = group_name.lower()
         entry = grouped.setdefault(
             key,
@@ -378,22 +357,25 @@ def status_badge(status: str) -> str:
     return f'<span class="status status-{html.escape(status)}">{label}</span>'
 
 
-def contributor_highlight_attribute(group_name: str) -> str:
+def contributor_highlight_attribute(group_name: str, config: ProjectConfig) -> str:
     """
     Return a class attribute for contributor groups that should stand out in the summary.
     """
-    if group_name.lower() in HIGHLIGHTED_CONTRIBUTOR_GROUPS:
+    if group_name.lower() in config.highlighted_groups():
         return ' class="highlighted"'
     return ""
 
 
-def render_contributor_summary_card(connection: sqlite3.Connection) -> str:
+def render_contributor_summary_card(
+    connection: sqlite3.Connection,
+    config: ProjectConfig,
+) -> str:
     """
     Render an HTML card summarizing the contributors across all repositories,
     grouped by contributor groups.
     """
     rows = load_contributor_rows(connection)
-    groups = group_contributors(rows)
+    groups = group_contributors(rows, config)
     total_contributors = len(groups)
 
     if not groups:
@@ -401,7 +383,7 @@ def render_contributor_summary_card(connection: sqlite3.Connection) -> str:
     else:
         contributor_items = "".join(
             f"""
-            <li{contributor_highlight_attribute(group.group_name)}>
+            <li{contributor_highlight_attribute(group.group_name, config)}>
                 <strong>{html.escape(group.group_name)}</strong>
                 <span class=\"members\">{html.escape(', '.join(group.members))}</span>
                 <span>{group.commit_total} commits across {group.repository_total} repositories</span>
@@ -616,12 +598,13 @@ def render_language_chart(languages: List[LanguageCount]) -> str:
 def render_repository_section(
     connection: sqlite3.Connection,
     repo: RepositorySummary,
+    config: ProjectConfig,
 ) -> str:
     """
     Render an HTML section for a single repository, including its summary
     and circular charts for committers and languages.
     """
-    committers = load_committers(connection, repo.full_name)
+    committers = load_committers(connection, repo.full_name, config)
     languages = load_languages(connection, repo.full_name)
     error_html = ""
     if repo.last_error:
@@ -660,11 +643,14 @@ def render_html(
     repositories: List[RepositorySummary],
     connection: sqlite3.Connection,
     db_path: str,
+    config: ProjectConfig,
 ) -> str:
     """
     Render the HTML report for the GitHub commit history.
     """
-    sections = "\n".join(render_repository_section(connection, repo) for repo in repositories)
+    sections = "\n".join(
+        render_repository_section(connection, repo, config) for repo in repositories
+    )
     if not sections:
         sections = (
             '<section class="repo-card"><p class="empty">'
@@ -674,14 +660,16 @@ def render_html(
 
     total_commits = sum(repo.commit_total for repo in repositories)
     total_repositories = len(repositories)
-    contributor_summary_card = render_contributor_summary_card(connection)
+    contributor_summary_card = render_contributor_summary_card(connection, config)
+    report_title = html.escape(config.title)
+    report_description = html.escape(config.description)
 
     return f"""<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GitHub Commit History Report</title>
+    <title>{report_title}</title>
     <style>
         :root {{
             color-scheme: light;
@@ -980,8 +968,8 @@ def render_html(
 <body>
     <main class="page">
         <section class="hero">
-            <h1>GitHub Commit History</h1>
-            <p>This report visualizes the repository history stored in the SQLite database, with per-repository totals and circular charts for committers and languages.</p>
+            <h1>{report_title}</h1>
+            <p>{report_description}</p>
         </section>
 
         {contributor_summary_card}
@@ -1005,7 +993,13 @@ def main() -> int:
     Main entry point for the script. Parses arguments, loads data from the database.
     """
     args = parse_args()
-    db_path = Path(args.db)
+    try:
+        config = load_config(Path(args.config) if args.config else None)
+    except (FileNotFoundError, ValueError, OSError, tomllib.TOMLDecodeError) as error:
+        print(error)
+        return 1
+
+    db_path = Path(args.db) if args.db else config.database
     if not db_path.exists():
         print(f"Database not found: {db_path}")
         return 1
@@ -1015,7 +1009,7 @@ def main() -> int:
         connection = sqlite3.connect(str(db_path))
         load_schema(connection)
         repositories = load_repositories(connection)
-        html_report = render_html(repositories, connection, str(db_path))
+        html_report = render_html(repositories, connection, str(db_path), config)
     except (sqlite3.Error, RuntimeError) as error:
         print(f"Failed to build report: {error}")
         return 1
@@ -1023,7 +1017,7 @@ def main() -> int:
         if connection is not None:
             connection.close()
 
-    output_path = Path(args.output)
+    output_path = Path(args.output) if args.output else config.report
     output_path.write_text(html_report, encoding="utf-8")
     print(f"Report written to {output_path}")
     return 0
