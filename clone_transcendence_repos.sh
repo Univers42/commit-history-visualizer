@@ -20,7 +20,7 @@ while IFS= read -r line || [[ -n "$line" ]]; do
   mkdir -p "$parent_dir" || exit 1
 
   if [[ -d "$repo_path" ]]; then
-    git switch main
+    git -C "$repo_path" switch main
     git -C "$repo_path" pull --rebase origin main
   else
     git clone "https://github.com/Univers42/${repo_name}.git" "$repo_path"
