@@ -12,7 +12,6 @@ import argparse
 import sqlite3
 import subprocess
 import sys
-import tomllib
 import webbrowser
 from collections import defaultdict
 from dataclasses import dataclass
@@ -627,7 +626,7 @@ def main() -> int:
     try:
         config = load_config(Path(args.config) if args.config else None)
         repositories = collect_input_repositories(args, config)
-    except (FileNotFoundError, ValueError, OSError, tomllib.TOMLDecodeError) as error:
+    except (FileNotFoundError, ValueError, OSError) as error:
         print(error)
         return 1
 

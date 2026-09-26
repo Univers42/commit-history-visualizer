@@ -14,7 +14,6 @@ import html
 import math
 import sqlite3
 import sys
-import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, List, Optional
@@ -753,7 +752,7 @@ def main() -> int:
     args = parse_args()
     try:
         config = load_config(Path(args.config) if args.config else None)
-    except (FileNotFoundError, ValueError, OSError, tomllib.TOMLDecodeError) as error:
+    except (FileNotFoundError, ValueError, OSError) as error:
         print(error)
         return 1
 

@@ -2,9 +2,27 @@
 
 """Load the project configuration shared by the clone, collect, and report tools."""
 
+import importlib
 from dataclasses import dataclass
 from pathlib import Path
-import tomllib
+
+
+def _import_toml():
+    """
+    Load the TOML reader. Python 3.11+ provides tomllib; Python 3.10 uses the tomli backport.
+    """
+    for module_name in ("tomllib", "tomli"):
+        try:
+            return importlib.import_module(module_name)
+        except ModuleNotFoundError:
+            continue
+    raise ImportError(
+        "Python 3.10 cannot read TOML from the standard library. "
+        "Install the backport with: pip install 'tomli>=1.2.3'"
+    )
+
+
+tomllib = _import_toml()
 
 
 DEFAULT_DESCRIPTION = (
@@ -124,8 +142,11 @@ def load_config(path: Path | None = None) -> ProjectConfig:
     if not config_path.is_file():
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
 
-    with config_path.open("rb") as handle:
-        raw = tomllib.load(handle)
+    try:
+        with config_path.open("rb") as handle:
+            raw = tomllib.load(handle)
+    except tomllib.TOMLDecodeError as error:
+        raise ValueError(f"Invalid TOML in {config_path}: {error}") from error
     return _parse_config(config_path.resolve(), raw)
 
 

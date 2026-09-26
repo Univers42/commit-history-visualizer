@@ -5,7 +5,6 @@
 import argparse
 import subprocess
 import sys
-import tomllib
 from pathlib import Path
 
 from project_config import ProjectConfig, load_config
@@ -50,7 +49,7 @@ def main() -> int:
     args = parse_args()
     try:
         config = load_config(Path(args.config) if args.config else None)
-    except (FileNotFoundError, ValueError, OSError, tomllib.TOMLDecodeError) as error:
+    except (FileNotFoundError, ValueError, OSError) as error:
         print(error)
         return 1
 
