@@ -413,6 +413,7 @@ def render_contributor_summary_card(
             for group in groups
         )
 
+    contributor_chart = render_contributor_chart(groups)
     return f"""
     <section class="summary-card">
         <div class="summary-header">
@@ -424,6 +425,9 @@ def render_contributor_summary_card(
                 <span class="label">Unique contributors</span>
                 <strong>{total_contributors}</strong>
             </div>
+        </div>
+        <div class="summary-chart">
+            {contributor_chart}
         </div>
         <ul class="contributor-list">
             {contributor_items}
@@ -589,6 +593,28 @@ def render_circle_chart(slices: List[ChartSlice], options: CircleChartOptions) -
         current_angle = end_angle
 
     return _assemble_chart(ring, options, paths, legend_items)
+
+
+def render_contributor_chart(groups: List[GroupSummary]) -> str:
+    """
+    Render the circular chart of total commits for each contributor group.
+    """
+    slices = [
+        ChartSlice(label=group.group_name, value=group.commit_total)
+        for group in groups
+        if group.commit_total > 0
+    ]
+    total = sum(item.value for item in slices)
+    return render_circle_chart(
+        slices,
+        CircleChartOptions(
+            center_value=str(total),
+            center_label="commits",
+            empty_message="No contributor commits were found in the database.",
+            aria_label="Total commits per contributor",
+            format_value=lambda value, percent: f"{value} ({percent:.1f}%)",
+        ),
+    )
 
 
 def render_committer_chart(committers: List[CommitterCount]) -> str:

@@ -95,6 +95,23 @@ body {
     font-size: 1.8rem;
     color: var(--accent);
 }
+.summary-chart {
+    margin-bottom: 18px;
+}
+.summary-chart .chart-layout {
+    grid-template-columns: minmax(180px, 260px) minmax(240px, 420px);
+    justify-content: start;
+}
+.summary-chart .pie-chart {
+    max-width: 260px;
+}
+.summary-chart .chart-legend {
+    max-height: 280px;
+}
+.summary-chart .chart-legend li {
+    grid-template-columns: 12px auto auto;
+    justify-content: start;
+}
 .contributor-list {
     margin: 0;
     padding: 0;
@@ -319,6 +336,92 @@ body {
                 <strong>12</strong>
             </div>
         </div>
+        <div class="summary-chart">
+            
+    <div class="chart-layout">
+        <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Total commits per contributor">
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 48.859 107.185 L 108.310 140.194 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 8835 (83.1%)</title></path><path d="M 48.859 107.185 A 150.000 150.000 0 0 1 78.116 69.910 L 124.304 119.818 A 82.000 82.000 0 0 0 108.310 140.194 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 537 (5.0%)</title></path><path d="M 78.116 69.910 A 150.000 150.000 0 0 1 101.372 52.259 L 137.017 110.168 A 82.000 82.000 0 0 0 124.304 119.818 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>rstancu: 330 (3.1%)</title></path><path d="M 101.372 52.259 A 150.000 150.000 0 0 1 123.561 41.023 L 149.147 104.026 A 82.000 82.000 0 0 0 137.017 110.168 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 281 (2.6%)</title></path><path d="M 123.561 41.023 A 150.000 150.000 0 0 1 146.782 33.724 L 161.841 100.036 A 82.000 82.000 0 0 0 149.147 104.026 Z" fill="hsl(2.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>serjimen: 275 (2.6%)</title></path><path d="M 146.782 33.724 A 150.000 150.000 0 0 1 170.260 30.317 L 174.675 98.173 A 82.000 82.000 0 0 0 161.841 100.036 Z" fill="hsl(139.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 268 (2.5%)</title></path><path d="M 170.260 30.317 A 150.000 150.000 0 0 1 175.481 30.068 L 177.530 98.037 A 82.000 82.000 0 0 0 174.675 98.173 Z" fill="hsl(277.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>alcacere: 59 (0.6%)</title></path><path d="M 175.481 30.068 A 150.000 150.000 0 0 1 178.494 30.008 L 179.177 98.004 A 82.000 82.000 0 0 0 177.530 98.037 Z" fill="hsl(54.6, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>Claude: 34 (0.3%)</title></path><path d="M 178.494 30.008 A 150.000 150.000 0 0 1 179.646 30.000 L 179.806 98.000 A 82.000 82.000 0 0 0 179.177 98.004 Z" fill="hsl(192.1, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>SMOSTAFAH1: 13 (0.1%)</title></path><path d="M 179.646 30.000 A 150.000 150.000 0 0 1 179.823 30.000 L 179.903 98.000 A 82.000 82.000 0 0 0 179.806 98.000 Z" fill="hsl(329.6, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>Daniel Martin Ojeda: 2 (0.0%)</title></path><path d="M 179.823 30.000 A 150.000 150.000 0 0 1 179.911 30.000 L 179.952 98.000 A 82.000 82.000 0 0 0 179.903 98.000 Z" fill="hsl(107.1, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>AI Assistant: 1 (0.0%)</title></path><path d="M 179.911 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.952 98.000 Z" fill="hsl(244.6, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>test: 1 (0.0%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">10636</text>
+            <text x="180.0" y="196.0" class="pie-center-label">commits</text>
+        </svg>
+        <ul class="chart-legend">
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
+                <span class="legend-name">dlesieur</span>
+                <span class="legend-value">8835 (83.1%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(309.5, 48%, 42%)"></span>
+                <span class="legend-name">danfern3</span>
+                <span class="legend-value">537 (5.0%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(87.0, 48%, 42%)"></span>
+                <span class="legend-name">rstancu</span>
+                <span class="legend-value">330 (3.1%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(224.5, 48%, 42%)"></span>
+                <span class="legend-name">vjan-nie</span>
+                <span class="legend-value">281 (2.6%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(2.0, 48%, 42%)"></span>
+                <span class="legend-name">serjimen</span>
+                <span class="legend-value">275 (2.6%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(139.5, 48%, 42%)"></span>
+                <span class="legend-name">GitHub</span>
+                <span class="legend-value">268 (2.5%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(277.0, 48%, 42%)"></span>
+                <span class="legend-name">alcacere</span>
+                <span class="legend-value">59 (0.6%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(54.6, 48%, 42%)"></span>
+                <span class="legend-name">Claude</span>
+                <span class="legend-value">34 (0.3%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(192.1, 48%, 42%)"></span>
+                <span class="legend-name">SMOSTAFAH1</span>
+                <span class="legend-value">13 (0.1%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(329.6, 48%, 42%)"></span>
+                <span class="legend-name">Daniel Martin Ojeda</span>
+                <span class="legend-value">2 (0.0%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(107.1, 48%, 42%)"></span>
+                <span class="legend-name">AI Assistant</span>
+                <span class="legend-value">1 (0.0%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(244.6, 48%, 42%)"></span>
+                <span class="legend-name">test</span>
+                <span class="legend-value">1 (0.0%)</span>
+            </li>
+            
+        </ul>
+    </div>
+    
+        </div>
         <ul class="contributor-list">
             
             <li class="highlighted">
@@ -407,7 +510,7 @@ body {
         <header>
             <div>
                 <h2>42ctl</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:27.418980+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.159878+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -534,7 +637,7 @@ body {
         <header>
             <div>
                 <h2>DoD</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:27.545952+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.284185+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -595,7 +698,7 @@ body {
         <header>
             <div>
                 <h2>QA</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.683428+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.427520+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -698,7 +801,7 @@ body {
         <header>
             <div>
                 <h2>UI-Collection</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.828372+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.574416+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -789,7 +892,7 @@ body {
         <header>
             <div>
                 <h2>adapter-registry-api</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:27.434781+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.177029+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -874,7 +977,7 @@ body {
         <header>
             <div>
                 <h2>bob</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:27.453301+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.193862+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -935,7 +1038,7 @@ body {
         <header>
             <div>
                 <h2>born2root</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:27.501226+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.235929+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -1098,7 +1201,7 @@ body {
         <header>
             <div>
                 <h2>cc1</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:27.530172+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.266819+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -1189,7 +1292,7 @@ body {
         <header>
             <div>
                 <h2>draw-engine</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:27.589992+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.329265+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -1334,7 +1437,7 @@ body {
         <header>
             <div>
                 <h2>drawnosaurus</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:27.633301+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.380275+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -1473,7 +1576,7 @@ body {
         <header>
             <div>
                 <h2>email-api</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:27.648631+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.395336+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -1500,7 +1603,7 @@ body {
         <header>
             <div>
                 <h2>formula-engine</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:27.671546+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.416126+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -1591,7 +1694,7 @@ body {
         <header>
             <div>
                 <h2>grobase</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:27.807779+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.557843+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -1796,7 +1899,7 @@ body {
         <header>
             <div>
                 <h2>groot</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:27.881185+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.631752+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -1941,7 +2044,7 @@ body {
         <header>
             <div>
                 <h2>hellish</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.009312+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.754374+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2080,7 +2183,7 @@ body {
         <header>
             <div>
                 <h2>hellishrc_plugins</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.046861+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.791491+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2147,7 +2250,7 @@ body {
         <header>
             <div>
                 <h2>laboratory</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.070871+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.812784+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2268,7 +2371,7 @@ body {
         <header>
             <div>
                 <h2>libcss</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.130011+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.866929+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2383,7 +2486,7 @@ body {
         <header>
             <div>
                 <h2>libft</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.185067+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.925757+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2498,7 +2601,7 @@ body {
         <header>
             <div>
                 <h2>markdown-engine</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.221452+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.965656+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2631,7 +2734,7 @@ body {
         <header>
             <div>
                 <h2>markengine</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.245656+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:48.992239+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2770,7 +2873,7 @@ body {
         <header>
             <div>
                 <h2>mini-baas</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.270952+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.015646+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2867,7 +2970,7 @@ body {
         <header>
             <div>
                 <h2>mini-baas-sdk</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.294134+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.033924+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2946,7 +3049,7 @@ body {
         <header>
             <div>
                 <h2>mongo-api</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.310211+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.052639+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2973,7 +3076,7 @@ body {
         <header>
             <div>
                 <h2>monkey-bot</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.329742+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.072466+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3100,7 +3203,7 @@ body {
         <header>
             <div>
                 <h2>notion-database-sys</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.405657+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.144748+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3251,7 +3354,7 @@ body {
         <header>
             <div>
                 <h2>osionos</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.483011+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.234526+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3414,7 +3517,7 @@ body {
         <header>
             <div>
                 <h2>osionos-calendar</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.500595+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.253684+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3517,7 +3620,7 @@ body {
         <header>
             <div>
                 <h2>osionos-canvas</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.519414+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.273548+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3544,7 +3647,7 @@ body {
         <header>
             <div>
                 <h2>osionos-mail</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.541802+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.295605+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3653,7 +3756,7 @@ body {
         <header>
             <div>
                 <h2>osionos-ui</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.566525+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.318979+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3774,7 +3877,7 @@ body {
         <header>
             <div>
                 <h2>prismatica</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.605680+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.355304+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3901,7 +4004,7 @@ body {
         <header>
             <div>
                 <h2>prismatica-landing</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.660510+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.406998+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -4028,7 +4131,7 @@ body {
         <header>
             <div>
                 <h2>realtime-agnostic</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.718181+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.461833+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -4161,7 +4264,7 @@ body {
         <header>
             <div>
                 <h2>scripts</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.745586+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.488107+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -4282,7 +4385,7 @@ body {
         <header>
             <div>
                 <h2>storage-router-api</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.763031+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.508011+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -4309,7 +4412,7 @@ body {
         <header>
             <div>
                 <h2>transcendence</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.799436+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.545395+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -4460,7 +4563,7 @@ body {
         <header>
             <div>
                 <h2>vault42</h2>
-                <p class="meta">Collected at 2026-09-26T07:58:28.865404+00:00</p>
+                <p class="meta">Collected at 2026-09-26T08:06:49.613147+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>

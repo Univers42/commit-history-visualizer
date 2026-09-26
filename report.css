@@ -88,6 +88,23 @@ body {
     font-size: 1.8rem;
     color: var(--accent);
 }
+.summary-chart {
+    margin-bottom: 18px;
+}
+.summary-chart .chart-layout {
+    grid-template-columns: minmax(180px, 260px) minmax(240px, 420px);
+    justify-content: start;
+}
+.summary-chart .pie-chart {
+    max-width: 260px;
+}
+.summary-chart .chart-legend {
+    max-height: 280px;
+}
+.summary-chart .chart-legend li {
+    grid-template-columns: 12px auto auto;
+    justify-content: start;
+}
 .contributor-list {
     margin: 0;
     padding: 0;
