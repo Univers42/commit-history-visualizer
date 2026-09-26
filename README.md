@@ -4,6 +4,22 @@ This project is a tool to generate a report of the commit history of the ft_tran
 
 ## Usage
 
+### Create the virtual environment
+```bash
+python3 -m venv myvenv
+```
+
+### Activate the virtual environment
+```bash
+source ./myvenv/bin/activate
+```
+
+### Install the requirements
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+### Clone the repository list from the [config.toml](config.toml)
 ```bash
 make collect-git-commit-history
 ```
