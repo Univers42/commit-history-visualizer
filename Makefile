@@ -13,6 +13,13 @@ FAIL := $(RED)✗
 INFO := $(CYAN)ℹ
 WARN := $(YELLOW)⚠
 
+## README:
+### If you have Python 3.11 or later, you can use the built-in tomllib module to read TOML files.
+TRANSCENDENCE_ROUTE := $(shell python3 -c "import tomllib; print(tomllib.load(open('config.toml', 'rb'))['clone']['directory'])")
+### If you have an earlier version of Python, you can use the tomli module instead.
+# TRANSCENDENCE_ROUTE := $(shell python3 -c 'import tomli; print(tomli.load(open("pyproject.toml", "rb"))["clone"]["directory"])')
+## END OF README
+
 # * Top row (╭━━━╮) - round corners, full-span
 # * Bottom row (╰━━━╯) - round corners, full-span
 # * Merge row (┣━━━┫) - full-span, left/right T junctions
@@ -21,17 +28,17 @@ WARN := $(YELLOW)⚠
 # * Column open (┣━┳━┫) - T-down (columns start below)
 # * Column close (┣━┻━┫) - T-up (columns end above)
 
-TOP_LEFT_CORNER := $(ORANGE)╭$(RESET)
-TOP_RIGHT_CORNER := $(ORANGE)╮$(RESET)
-BOTTOM_LEFT_CORNER := $(ORANGE)╰$(RESET)
-BOTTOM_RIGHT_CORNER := $(ORANGE)╯$(RESET)
-HORIZONTAL_LINE := $(ORANGE)━$(RESET)
-VERTICAL_LINE := $(ORANGE)┃$(RESET)
-LEFT_JUNCTION := $(ORANGE)┣$(RESET)
-RIGHT_JUNCTION := $(ORANGE)┫$(RESET)
-CROSS_JUNCTION := $(ORANGE)┣$(RESET)$(ORANGE)━$(RESET)$(ORANGE)┫$(RESET)
-OPEN_JUNCTION := $(ORANGE)┣$(RESET)$(ORANGE)━$(RESET)$(ORANGE)┫$(RESET)
-CLOSE_JUNCTION := $(ORANGE)┣$(RESET)$(ORANGE)━$(RESET)$(ORANGE)┫$(RESET)
+TOP_LEFT_CORNER := $(BLUE)╭$(RESET)
+TOP_RIGHT_CORNER := $(BLUE)╮$(RESET)
+BOTTOM_LEFT_CORNER := $(BLUE)╰$(RESET)
+BOTTOM_RIGHT_CORNER := $(BLUE)╯$(RESET)
+HORIZONTAL_LINE := $(BLUE)━$(RESET)
+VERTICAL_LINE := $(BLUE)┃$(RESET)
+LEFT_JUNCTION := $(BLUE)┣$(RESET)
+RIGHT_JUNCTION := $(BLUE)┫$(RESET)
+CROSS_JUNCTION := $(BLUE)┣$(RESET)$(BLUE)━$(RESET)$(BLUE)┫$(RESET)
+OPEN_JUNCTION := $(BLUE)┣$(RESET)$(BLUE)━$(RESET)$(BLUE)┫$(RESET)
+CLOSE_JUNCTION := $(BLUE)┣$(RESET)$(BLUE)━$(RESET)$(BLUE)┫$(RESET)
 
 .DEFAULT_GOAL := help
 
@@ -79,18 +86,26 @@ clone-repositories: ## Clone the repositories listed in config.toml
 	@./clone_repositories.sh
 	@$(call print_success,Repositories cloned successfully!)
 
-.PHONY: clone-transcendence-repositories
-clone-transcendence-repositories: clone-repositories
-
-.PHONY: collect-git-commit-history
-collect-git-commit-history: ## Collect commit history for the repositories in config.toml
-	@$(MAKE) -s clone-repositories
+.PHONY: generate-report
+generate-report: ## Collect commit history for the repositories in config.toml
+# 	@$(MAKE) -s clone-repositories
 	@$(call print_banner,Collecting Git Commit History)
 	@./create_commit_history.sh
 	@$(call print_success,Git commit history collected successfully!)
 
-.PHONY: lint ## Lint all Python scripts in the repository
-lint:
+.PHONY: lint
+lint: ## Lint all Python scripts in the repository
 	@$(call print_banner,Linting Python Scripts)
 	@./scripts/python/lint_python_scripts.py
 	@$(call print_success,Python scripts linted successfully!)
+
+.PHONY: update-submodules
+update-submodules: ## Update all git submodules
+	@$(call print_banner,Updating git submodules)
+	@./scripts/bash/update_submodules.sh
+
+.PHONY: clean
+clean: ## Clean up cloned repositories
+	@$(call print_banner,Cleaning up generated files)
+	@rm -rf $(TRANSCENDENCE_ROUTE)
+	@$(call print_success,Generated files cleaned up successfully!)
