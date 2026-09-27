@@ -4,318 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Transcendence Commit History</title>
-    <style>
-:root {
-    color-scheme: light;
-    --bg: #f5f1e8;
-    --panel: #fffdf8;
-    --ink: #1f2933;
-    --muted: #65717e;
-    --accent: #0f766e;
-    --accent-soft: #d6f0ec;
-    --warning: #b45309;
-    --warning-soft: #fef3c7;
-    --error: #b91c1c;
-    --error-soft: #fee2e2;
-    --border: #e6ddd0;
-    --shadow: 0 20px 45px rgba(31, 41, 51, 0.08);
-}
-body {
-    margin: 0;
-    font-family: Georgia, "Times New Roman", serif;
-    color: var(--ink);
-    background: radial-gradient(circle at top, #fff8ea 0, var(--bg) 48%, #efe7db 100%);
-}
-.page {
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 32px 20px 56px;
-}
-.hero {
-    background: linear-gradient(135deg, #173f5f 0%, #0f766e 100%);
-    color: white;
-    border-radius: 24px;
-    padding: 30px 32px;
-    box-shadow: var(--shadow);
-}
-.hero h1 {
-    margin: 0 0 10px;
-    font-size: clamp(2rem, 4vw, 3.6rem);
-    letter-spacing: -0.03em;
-}
-.hero p {
-    margin: 0;
-    max-width: 64ch;
-    line-height: 1.6;
-    color: rgba(255, 255, 255, 0.88);
-}
-.summary-card {
-    margin: 18px 0 30px;
-    padding: 22px 24px;
-    background: linear-gradient(180deg, #ffffff 0%, #fffaf1 100%);
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    box-shadow: var(--shadow);
-}
-.summary-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 18px;
-}
-.summary-header h2 {
-    margin: 0;
-    font-size: 1.45rem;
-}
-.eyebrow {
-    margin: 0 0 6px;
-    color: var(--accent);
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-}
-.summary-total {
-    min-width: 160px;
-    padding: 14px 16px;
-    border-radius: 18px;
-    background: var(--accent-soft);
-    border: 1px solid rgba(15, 118, 110, 0.12);
-    text-align: right;
-}
-.summary-total .label {
-    display: block;
-    color: var(--muted);
-    font-size: 0.9rem;
-}
-.summary-total strong {
-    display: block;
-    margin-top: 6px;
-    font-size: 1.8rem;
-    color: var(--accent);
-}
-.summary-chart {
-    margin-bottom: 18px;
-}
-.summary-chart .chart-layout {
-    grid-template-columns: minmax(180px, 260px) minmax(240px, 420px);
-    justify-content: start;
-}
-.summary-chart .pie-chart {
-    max-width: 260px;
-}
-.summary-chart .chart-legend {
-    max-height: 280px;
-}
-.summary-chart .chart-legend li {
-    grid-template-columns: 12px auto auto;
-    justify-content: start;
-}
-.contributor-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
-}
-.contributor-list li {
-    padding: 14px 16px;
-    border-radius: 18px;
-    background: #faf7f0;
-    border: 1px solid var(--border);
-    display: grid;
-    gap: 4px;
-}
-.contributor-list li strong {
-    font-size: 1rem;
-}
-.contributor-list li span {
-    color: var(--muted);
-    font-size: 0.93rem;
-    line-height: 1.4;
-}
-.contributor-list li .members {
-    display: block;
-    font-size: 0.88rem;
-    margin: 2px 0;
-    color: var(--accent);
-}
-.contributor-list li.highlighted {
-    background: var(--accent-soft);
-    border-color: var(--accent);
-    box-shadow: inset 4px 0 0 var(--accent);
-}
-.contributor-list li.highlighted strong {
-    color: var(--accent);
-}
-.overview {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
-    margin: 22px 0 30px;
-}
-.overview .tile, .repo-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    box-shadow: var(--shadow);
-}
-.overview .tile {
-    padding: 18px 20px;
-}
-.overview .tile .label, .stats .label, .meta {
-    color: var(--muted);
-}
-.overview .tile strong, .stats strong {
-    display: block;
-    font-size: 1.7rem;
-    margin-top: 6px;
-}
-.repo-card {
-    padding: 22px 24px 18px;
-    margin-bottom: 18px;
-}
-.repo-card header {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 16px;
-}
-.repo-card h2 {
-    margin: 0;
-    font-size: 1.45rem;
-}
-.meta {
-    margin: 6px 0 0;
-    font-size: 0.95rem;
-}
-.status {
-    display: inline-flex;
-    align-items: center;
-    padding: 8px 12px;
-    border-radius: 999px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-.status-success { background: var(--accent-soft); color: var(--accent); }
-.status-error { background: var(--error-soft); color: var(--error); }
-.stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 12px;
-    margin-bottom: 14px;
-}
-.stats div {
-    background: #faf7f0;
-    border-radius: 18px;
-    padding: 14px 16px;
-    border: 1px solid var(--border);
-}
-.chart-layout {
-    display: grid;
-    grid-template-columns: minmax(140px, 210px) minmax(0, 1fr);
-    gap: 14px 16px;
-    align-items: center;
-}
-.repo-charts {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px 28px;
-    align-items: start;
-}
-.chart-panel h3 {
-    margin: 0 0 12px;
-    font-size: 1.05rem;
-}
-.pie-chart {
-    width: 100%;
-    max-width: 210px;
-    height: auto;
-    overflow: visible;
-}
-.pie-center-value {
-    fill: var(--ink);
-    font-size: 22px;
-    font-weight: 700;
-    text-anchor: middle;
-    dominant-baseline: middle;
-}
-.pie-center-label {
-    fill: var(--muted);
-    font-size: 13px;
-    text-anchor: middle;
-    dominant-baseline: middle;
-}
-.chart-legend {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: grid;
-    gap: 8px;
-    max-height: 320px;
-    overflow: auto;
-}
-.chart-legend li {
-    display: grid;
-    grid-template-columns: 12px minmax(0, 1fr) auto;
-    gap: 10px;
-    align-items: center;
-}
-.legend-swatch {
-    width: 12px;
-    height: 12px;
-    border-radius: 999px;
-}
-.legend-name {
-    color: var(--ink);
-    font-size: 0.95rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.legend-value {
-    color: var(--muted);
-    font-size: 0.9rem;
-    white-space: nowrap;
-}
-.empty, .error { margin: 0; line-height: 1.6; }
-.error {
-    margin-bottom: 12px;
-    padding: 12px 14px;
-    border-radius: 14px;
-    background: var(--error-soft);
-    color: var(--error);
-}
-.footer {
-    margin-top: 28px;
-    color: var(--muted);
-    font-size: 0.95rem;
-}
-@media (max-width: 980px) {
-    .repo-charts {
-        grid-template-columns: 1fr;
-    }
-}
-@media (max-width: 720px) {
-    .hero, .repo-card { padding-left: 18px; padding-right: 18px; }
-    .repo-card header { flex-direction: column; }
-    .status { align-self: flex-start; }
-    .chart-layout {
-        grid-template-columns: 1fr;
-        justify-items: center;
-    }
-    .chart-legend {
-        width: 100%;
-        max-height: none;
-    }
-}
-
-    </style>
+    <link rel="stylesheet" href="report.css">
 </head>
 <body>
     <main class="page">
@@ -340,8 +29,8 @@ body {
             
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Total commits per contributor">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 48.517 107.805 L 108.123 140.533 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 8910 (83.0%)</title></path><path d="M 48.517 107.805 A 150.000 150.000 0 0 1 77.274 70.696 L 123.843 120.247 A 82.000 82.000 0 0 0 108.123 140.533 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 537 (5.0%)</title></path><path d="M 77.274 70.696 A 150.000 150.000 0 0 1 100.163 53.011 L 136.356 110.580 A 82.000 82.000 0 0 0 123.843 120.247 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>rstancu: 330 (3.1%)</title></path><path d="M 100.163 53.011 A 150.000 150.000 0 0 1 122.030 41.654 L 148.310 104.371 A 82.000 82.000 0 0 0 136.356 110.580 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 281 (2.6%)</title></path><path d="M 122.030 41.654 A 150.000 150.000 0 0 1 144.949 34.153 L 160.839 100.270 A 82.000 82.000 0 0 0 148.310 104.371 Z" fill="hsl(2.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>serjimen: 275 (2.6%)</title></path><path d="M 144.949 34.153 A 150.000 150.000 0 0 1 168.336 30.454 L 173.624 98.248 A 82.000 82.000 0 0 0 160.839 100.270 Z" fill="hsl(139.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 270 (2.5%)</title></path><path d="M 168.336 30.454 A 150.000 150.000 0 0 1 173.506 30.141 L 176.450 98.077 A 82.000 82.000 0 0 0 173.624 98.248 Z" fill="hsl(277.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>alcacere: 59 (0.5%)</title></path><path d="M 173.506 30.141 A 150.000 150.000 0 0 1 178.508 30.007 L 179.184 98.004 A 82.000 82.000 0 0 0 176.450 98.077 Z" fill="hsl(54.6, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>Claude: 57 (0.5%)</title></path><path d="M 178.508 30.007 A 150.000 150.000 0 0 1 179.649 30.000 L 179.808 98.000 A 82.000 82.000 0 0 0 179.184 98.004 Z" fill="hsl(192.1, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>SMOSTAFAH1: 13 (0.1%)</title></path><path d="M 179.649 30.000 A 150.000 150.000 0 0 1 179.824 30.000 L 179.904 98.000 A 82.000 82.000 0 0 0 179.808 98.000 Z" fill="hsl(329.6, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>Daniel Martin Ojeda: 2 (0.0%)</title></path><path d="M 179.824 30.000 A 150.000 150.000 0 0 1 179.912 30.000 L 179.952 98.000 A 82.000 82.000 0 0 0 179.904 98.000 Z" fill="hsl(107.1, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>AI Assistant: 1 (0.0%)</title></path><path d="M 179.912 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.952 98.000 Z" fill="hsl(244.6, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>test: 1 (0.0%)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">10736</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 49.751 105.601 L 108.797 139.328 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 9062 (83.3%)</title></path><path d="M 49.751 105.601 A 150.000 150.000 0 0 1 77.702 70.295 L 124.077 120.028 A 82.000 82.000 0 0 0 108.797 139.328 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 522 (4.8%)</title></path><path d="M 77.702 70.295 A 150.000 150.000 0 0 1 99.302 53.557 L 135.885 110.878 A 82.000 82.000 0 0 0 124.077 120.028 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>rstancu: 316 (2.9%)</title></path><path d="M 99.302 53.557 A 150.000 150.000 0 0 1 120.623 42.252 L 147.541 104.698 A 82.000 82.000 0 0 0 135.885 110.878 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>serjimen: 279 (2.6%)</title></path><path d="M 120.623 42.252 A 150.000 150.000 0 0 1 143.146 34.598 L 159.853 100.513 A 82.000 82.000 0 0 0 147.541 104.698 Z" fill="hsl(2.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 275 (2.5%)</title></path><path d="M 143.146 34.598 A 150.000 150.000 0 0 1 166.079 30.647 L 172.390 98.354 A 82.000 82.000 0 0 0 159.853 100.513 Z" fill="hsl(139.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 269 (2.5%)</title></path><path d="M 166.079 30.647 A 150.000 150.000 0 0 1 171.864 30.221 L 175.552 98.121 A 82.000 82.000 0 0 0 172.390 98.354 Z" fill="hsl(277.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>Claude: 67 (0.6%)</title></path><path d="M 171.864 30.221 A 150.000 150.000 0 0 1 176.969 30.031 L 178.343 98.017 A 82.000 82.000 0 0 0 175.552 98.121 Z" fill="hsl(54.6, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>alcacere: 59 (0.5%)</title></path><path d="M 176.969 30.031 A 150.000 150.000 0 0 1 179.654 30.000 L 179.811 98.000 A 82.000 82.000 0 0 0 178.343 98.017 Z" fill="hsl(192.1, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>shashemi: 31 (0.3%)</title></path><path d="M 179.654 30.000 A 150.000 150.000 0 0 1 179.827 30.000 L 179.905 98.000 A 82.000 82.000 0 0 0 179.811 98.000 Z" fill="hsl(329.6, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>Daniel Martin Ojeda: 2 (0.0%)</title></path><path d="M 179.827 30.000 A 150.000 150.000 0 0 1 179.913 30.000 L 179.953 98.000 A 82.000 82.000 0 0 0 179.905 98.000 Z" fill="hsl(107.1, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>AI Assistant: 1 (0.0%)</title></path><path d="M 179.913 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.953 98.000 Z" fill="hsl(244.6, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>test: 1 (0.0%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">10884</text>
             <text x="180.0" y="196.0" class="pie-center-label">commits</text>
         </svg>
         <ul class="chart-legend">
@@ -349,55 +38,55 @@ body {
             <li>
                 <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
                 <span class="legend-name">dlesieur</span>
-                <span class="legend-value">8910 (83.0%)</span>
+                <span class="legend-value">9062 (83.3%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(309.5, 48%, 42%)"></span>
                 <span class="legend-name">danfern3</span>
-                <span class="legend-value">537 (5.0%)</span>
+                <span class="legend-value">522 (4.8%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(87.0, 48%, 42%)"></span>
                 <span class="legend-name">rstancu</span>
-                <span class="legend-value">330 (3.1%)</span>
+                <span class="legend-value">316 (2.9%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(224.5, 48%, 42%)"></span>
-                <span class="legend-name">vjan-nie</span>
-                <span class="legend-value">281 (2.6%)</span>
+                <span class="legend-name">serjimen</span>
+                <span class="legend-value">279 (2.6%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(2.0, 48%, 42%)"></span>
-                <span class="legend-name">serjimen</span>
-                <span class="legend-value">275 (2.6%)</span>
+                <span class="legend-name">GitHub</span>
+                <span class="legend-value">275 (2.5%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(139.5, 48%, 42%)"></span>
-                <span class="legend-name">GitHub</span>
-                <span class="legend-value">270 (2.5%)</span>
+                <span class="legend-name">vjan-nie</span>
+                <span class="legend-value">269 (2.5%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(277.0, 48%, 42%)"></span>
+                <span class="legend-name">Claude</span>
+                <span class="legend-value">67 (0.6%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(54.6, 48%, 42%)"></span>
                 <span class="legend-name">alcacere</span>
                 <span class="legend-value">59 (0.5%)</span>
             </li>
             
             <li>
-                <span class="legend-swatch" style="background:hsl(54.6, 48%, 42%)"></span>
-                <span class="legend-name">Claude</span>
-                <span class="legend-value">57 (0.5%)</span>
-            </li>
-            
-            <li>
                 <span class="legend-swatch" style="background:hsl(192.1, 48%, 42%)"></span>
-                <span class="legend-name">SMOSTAFAH1</span>
-                <span class="legend-value">13 (0.1%)</span>
+                <span class="legend-name">shashemi</span>
+                <span class="legend-value">31 (0.3%)</span>
             </li>
             
             <li>
@@ -427,37 +116,43 @@ body {
             <li class="highlighted">
                 <strong>dlesieur</strong>
                 <span class="members">Dylan Lesieur, LESdylan, dlesieur, dylan, dylan51100, dyles42</span>
-                <span>8910 commits across 29 repositories</span>
+                <span>9062 commits across 29 repositories</span>
             </li>
             
             <li class="highlighted">
                 <strong>danfern3</strong>
                 <span class="members">danielfdez17</span>
-                <span>537 commits across 15 repositories</span>
+                <span>522 commits across 15 repositories</span>
             </li>
             
             <li>
                 <strong>rstancu</strong>
                 <span class="members">settes</span>
-                <span>330 commits across 9 repositories</span>
-            </li>
-            
-            <li class="highlighted">
-                <strong>vjan-nie</strong>
-                <span class="members">Vadim Jan Nieto, Vado, vjan-nie</span>
-                <span>281 commits across 13 repositories</span>
+                <span>316 commits across 9 repositories</span>
             </li>
             
             <li class="highlighted">
                 <strong>serjimen</strong>
                 <span class="members">DJSurgeon, serjimen</span>
-                <span>275 commits across 11 repositories</span>
+                <span>279 commits across 11 repositories</span>
             </li>
             
             <li>
                 <strong>GitHub</strong>
                 <span class="members">GitHub</span>
-                <span>270 commits across 18 repositories</span>
+                <span>275 commits across 17 repositories</span>
+            </li>
+            
+            <li class="highlighted">
+                <strong>vjan-nie</strong>
+                <span class="members">Vadim Jan Nieto, Vado, vjan-nie</span>
+                <span>269 commits across 13 repositories</span>
+            </li>
+            
+            <li>
+                <strong>Claude</strong>
+                <span class="members">Claude</span>
+                <span>67 commits across 2 repositories</span>
             </li>
             
             <li>
@@ -466,16 +161,10 @@ body {
                 <span>59 commits across 3 repositories</span>
             </li>
             
-            <li>
-                <strong>Claude</strong>
-                <span class="members">Claude</span>
-                <span>57 commits across 2 repositories</span>
-            </li>
-            
             <li class="highlighted">
-                <strong>SMOSTAFAH1</strong>
-                <span class="members">SMOSTAFAH1</span>
-                <span>13 commits across 3 repositories</span>
+                <strong>shashemi</strong>
+                <span class="members">SEYED MOSTAFA HASHEMIAN, SEYED MOSTAFA HASHEMIAN (SMH), SMOSTAFAH1</span>
+                <span>31 commits across 9 repositories</span>
             </li>
             
             <li>
@@ -502,7 +191,7 @@ body {
 
         <section class="overview" aria-label="summary">
             <div class="tile"><span class="label">Repositories</span><strong>38</strong></div>
-            <div class="tile"><span class="label">Total commits</span><strong>10736</strong></div>
+            <div class="tile"><span class="label">Total commits</span><strong>10884</strong></div>
         </section>
 
         
@@ -510,7 +199,7 @@ body {
         <header>
             <div>
                 <h2>42ctl</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:01.606026+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.289734+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -637,7 +326,7 @@ body {
         <header>
             <div>
                 <h2>DoD</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:01.746839+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.354749+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -698,12 +387,12 @@ body {
         <header>
             <div>
                 <h2>QA</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.740711+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:33.039247+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>54</strong></div>
+            <div><span class="label">Commits</span><strong>42</strong></div>
             <div><span class="label">Committers</span><strong>3</strong></div>
             <div><span class="label">Languages</span><strong>6</strong></div>
         </div>
@@ -714,8 +403,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 50.096 105.000 L 108.986 139.000 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 45 (83.3%)</title></path><path d="M 50.096 105.000 A 150.000 150.000 0 0 1 162.586 31.014 L 170.480 98.554 A 82.000 82.000 0 0 0 108.986 139.000 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>rstancu: 8 (14.8%)</title></path><path d="M 162.586 31.014 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 170.480 98.554 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 1 (1.9%)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">54</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 114.917 44.855 L 144.422 106.121 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 39 (92.9%)</title></path><path d="M 114.917 44.855 A 150.000 150.000 0 0 1 157.644 31.675 L 167.779 98.916 A 82.000 82.000 0 0 0 144.422 106.121 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>rstancu: 2 (4.8%)</title></path><path d="M 157.644 31.675 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 167.779 98.916 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 1 (2.4%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">42</text>
             <text x="180.0" y="196.0" class="pie-center-label">commits</text>
         </svg>
         <ul class="chart-legend">
@@ -723,19 +412,19 @@ body {
             <li>
                 <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
                 <span class="legend-name">vjan-nie</span>
-                <span class="legend-value">45 (83.3%)</span>
+                <span class="legend-value">39 (92.9%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(309.5, 48%, 42%)"></span>
                 <span class="legend-name">rstancu</span>
-                <span class="legend-value">8 (14.8%)</span>
+                <span class="legend-value">2 (4.8%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(87.0, 48%, 42%)"></span>
                 <span class="legend-name">danfern3</span>
-                <span class="legend-value">1 (1.9%)</span>
+                <span class="legend-value">1 (2.4%)</span>
             </li>
             
         </ul>
@@ -801,7 +490,7 @@ body {
         <header>
             <div>
                 <h2>UI-Collection</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.880775+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:33.145838+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -892,7 +581,7 @@ body {
         <header>
             <div>
                 <h2>adapter-registry-api</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:01.633516+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.299484+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -977,7 +666,7 @@ body {
         <header>
             <div>
                 <h2>bob</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:01.647482+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.307307+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -1038,7 +727,7 @@ body {
         <header>
             <div>
                 <h2>born2root</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:01.670563+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.329944+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -1201,7 +890,7 @@ body {
         <header>
             <div>
                 <h2>cc1</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:01.726209+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.345240+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -1292,12 +981,12 @@ body {
         <header>
             <div>
                 <h2>draw-engine</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:01.778117+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.381802+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>381</strong></div>
+            <div><span class="label">Commits</span><strong>420</strong></div>
             <div><span class="label">Committers</span><strong>5</strong></div>
             <div><span class="label">Languages</span><strong>11</strong></div>
         </div>
@@ -1308,8 +997,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 98.149 54.301 L 135.255 111.284 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 346 (90.8%)</title></path><path d="M 98.149 54.301 A 150.000 150.000 0 0 1 138.496 35.856 L 157.311 101.201 A 82.000 82.000 0 0 0 135.255 111.284 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 18 (4.7%)</title></path><path d="M 138.496 35.856 A 150.000 150.000 0 0 1 155.375 32.035 L 166.538 99.113 A 82.000 82.000 0 0 0 157.311 101.201 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>SMOSTAFAH1: 7 (1.8%)</title></path><path d="M 155.375 32.035 A 150.000 150.000 0 0 1 167.646 30.510 L 173.246 98.279 A 82.000 82.000 0 0 0 166.538 99.113 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 5 (1.3%)</title></path><path d="M 167.646 30.510 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 173.246 98.279 Z" fill="hsl(2.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 5 (1.3%)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">381</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 105.000 50.096 L 139.000 108.986 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 385 (91.7%)</title></path><path d="M 105.000 50.096 A 150.000 150.000 0 0 1 142.262 34.825 L 159.370 100.638 A 82.000 82.000 0 0 0 139.000 108.986 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 18 (4.3%)</title></path><path d="M 142.262 34.825 A 150.000 150.000 0 0 1 157.644 31.675 L 167.779 98.916 A 82.000 82.000 0 0 0 159.370 100.638 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>shashemi: 7 (1.7%)</title></path><path d="M 157.644 31.675 A 150.000 150.000 0 0 1 168.790 30.419 L 173.872 98.229 A 82.000 82.000 0 0 0 167.779 98.916 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 5 (1.2%)</title></path><path d="M 168.790 30.419 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 173.872 98.229 Z" fill="hsl(2.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 5 (1.2%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">420</text>
             <text x="180.0" y="196.0" class="pie-center-label">commits</text>
         </svg>
         <ul class="chart-legend">
@@ -1317,31 +1006,31 @@ body {
             <li>
                 <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
                 <span class="legend-name">dlesieur</span>
-                <span class="legend-value">346 (90.8%)</span>
+                <span class="legend-value">385 (91.7%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(309.5, 48%, 42%)"></span>
                 <span class="legend-name">danfern3</span>
-                <span class="legend-value">18 (4.7%)</span>
+                <span class="legend-value">18 (4.3%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(87.0, 48%, 42%)"></span>
-                <span class="legend-name">SMOSTAFAH1</span>
-                <span class="legend-value">7 (1.8%)</span>
+                <span class="legend-name">shashemi</span>
+                <span class="legend-value">7 (1.7%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(224.5, 48%, 42%)"></span>
                 <span class="legend-name">GitHub</span>
-                <span class="legend-value">5 (1.3%)</span>
+                <span class="legend-value">5 (1.2%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(2.0, 48%, 42%)"></span>
                 <span class="legend-name">vjan-nie</span>
-                <span class="legend-value">5 (1.3%)</span>
+                <span class="legend-value">5 (1.2%)</span>
             </li>
             
         </ul>
@@ -1353,8 +1042,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Language usage by bytes of code">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 39.945 126.292 L 103.436 150.640 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="#292929" stroke="#fffdf8" stroke-width="2"><title>JSON: 13.4 MB (80.8%) (5 files)</title></path><path d="M 39.945 126.292 A 150.000 150.000 0 0 1 168.320 30.455 L 173.615 98.249 A 82.000 82.000 0 0 0 103.436 150.640 Z" fill="#dea584" stroke="#fffdf8" stroke-width="2"><title>Rust: 3.0 MB (17.9%) (198 files)</title></path><path d="M 168.320 30.455 A 150.000 150.000 0 0 1 176.084 30.051 L 177.859 98.028 A 82.000 82.000 0 0 0 173.615 98.249 Z" fill="#3178c6" stroke="#fffdf8" stroke-width="2"><title>TypeScript: 140.4 KB (0.8%) (22 files)</title></path><path d="M 176.084 30.051 A 150.000 150.000 0 0 1 178.630 30.006 L 179.251 98.003 A 82.000 82.000 0 0 0 177.859 98.028 Z" fill="#f1e05a" stroke="#fffdf8" stroke-width="2"><title>JavaScript: 46.0 KB (0.3%) (10 files)</title></path><path d="M 178.630 30.006 A 150.000 150.000 0 0 1 178.942 30.004 L 179.422 98.002 A 82.000 82.000 0 0 0 179.251 98.003 Z" fill="#89e051" stroke="#fffdf8" stroke-width="2"><title>Shell: 5.6 KB (0.0%) (2 files)</title></path><path d="M 178.942 30.004 A 150.000 150.000 0 0 1 179.200 30.002 L 179.563 98.001 A 82.000 82.000 0 0 0 179.422 98.002 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 4.7 KB (0.0%) (2 files)</title></path><path d="M 179.200 30.002 A 150.000 150.000 0 0 1 179.433 30.001 L 179.690 98.001 A 82.000 82.000 0 0 0 179.563 98.001 Z" fill="#9c4221" stroke="#fffdf8" stroke-width="2"><title>TOML: 4.2 KB (0.0%) (5 files)</title></path><path d="M 179.433 30.001 A 150.000 150.000 0 0 1 179.644 30.000 L 179.806 98.000 A 82.000 82.000 0 0 0 179.690 98.001 Z" fill="#ff3e00" stroke="#fffdf8" stroke-width="2"><title>Svelte: 3.8 KB (0.0%) (1 files)</title></path><path d="M 179.644 30.000 A 150.000 150.000 0 0 1 179.783 30.000 L 179.881 98.000 A 82.000 82.000 0 0 0 179.806 98.000 Z" fill="#427819" stroke="#fffdf8" stroke-width="2"><title>Makefile: 2.5 KB (0.0%) (1 files)</title></path><path d="M 179.783 30.000 A 150.000 150.000 0 0 1 179.918 30.000 L 179.955 98.000 A 82.000 82.000 0 0 0 179.881 98.000 Z" fill="#cb171e" stroke="#fffdf8" stroke-width="2"><title>YAML: 2.4 KB (0.0%) (3 files)</title></path><path d="M 179.918 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.955 98.000 Z" fill="#384d54" stroke="#fffdf8" stroke-width="2"><title>Dockerfile: 1.5 KB (0.0%) (1 files)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">16.6 MB</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 75.305 72.581 L 122.767 121.277 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="#292929" stroke="#fffdf8" stroke-width="2"><title>JSON: 26.0 MB (87.7%) (11 files)</title></path><path d="M 75.305 72.581 A 150.000 150.000 0 0 1 170.553 30.298 L 174.836 98.163 A 82.000 82.000 0 0 0 122.767 121.277 Z" fill="#dea584" stroke="#fffdf8" stroke-width="2"><title>Rust: 3.3 MB (11.3%) (223 files)</title></path><path d="M 170.553 30.298 A 150.000 150.000 0 0 1 175.527 30.067 L 177.555 98.036 A 82.000 82.000 0 0 0 174.836 98.163 Z" fill="#3178c6" stroke="#fffdf8" stroke-width="2"><title>TypeScript: 160.1 KB (0.5%) (26 files)</title></path><path d="M 175.527 30.067 A 150.000 150.000 0 0 1 179.063 30.003 L 179.488 98.002 A 82.000 82.000 0 0 0 177.555 98.036 Z" fill="#f1e05a" stroke="#fffdf8" stroke-width="2"><title>JavaScript: 113.7 KB (0.4%) (19 files)</title></path><path d="M 179.063 30.003 A 150.000 150.000 0 0 1 179.331 30.001 L 179.634 98.001 A 82.000 82.000 0 0 0 179.488 98.002 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 8.6 KB (0.0%) (4 files)</title></path><path d="M 179.331 30.001 A 150.000 150.000 0 0 1 179.506 30.001 L 179.730 98.000 A 82.000 82.000 0 0 0 179.634 98.001 Z" fill="#89e051" stroke="#fffdf8" stroke-width="2"><title>Shell: 5.6 KB (0.0%) (2 files)</title></path><path d="M 179.506 30.001 A 150.000 150.000 0 0 1 179.645 30.000 L 179.806 98.000 A 82.000 82.000 0 0 0 179.730 98.000 Z" fill="#9c4221" stroke="#fffdf8" stroke-width="2"><title>TOML: 4.5 KB (0.0%) (5 files)</title></path><path d="M 179.645 30.000 A 150.000 150.000 0 0 1 179.764 30.000 L 179.871 98.000 A 82.000 82.000 0 0 0 179.806 98.000 Z" fill="#ff3e00" stroke="#fffdf8" stroke-width="2"><title>Svelte: 3.8 KB (0.0%) (1 files)</title></path><path d="M 179.764 30.000 A 150.000 150.000 0 0 1 179.872 30.000 L 179.930 98.000 A 82.000 82.000 0 0 0 179.871 98.000 Z" fill="#cb171e" stroke="#fffdf8" stroke-width="2"><title>YAML: 3.5 KB (0.0%) (3 files)</title></path><path d="M 179.872 30.000 A 150.000 150.000 0 0 1 179.950 30.000 L 179.973 98.000 A 82.000 82.000 0 0 0 179.930 98.000 Z" fill="#427819" stroke="#fffdf8" stroke-width="2"><title>Makefile: 2.5 KB (0.0%) (1 files)</title></path><path d="M 179.950 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.973 98.000 Z" fill="#384d54" stroke="#fffdf8" stroke-width="2"><title>Dockerfile: 1.6 KB (0.0%) (1 files)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">29.6 MB</text>
             <text x="180.0" y="196.0" class="pie-center-label">code</text>
         </svg>
         <ul class="chart-legend">
@@ -1362,25 +1051,31 @@ body {
             <li>
                 <span class="legend-swatch" style="background:#292929"></span>
                 <span class="legend-name">JSON</span>
-                <span class="legend-value">13.4 MB (80.8%)</span>
+                <span class="legend-value">26.0 MB (87.7%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#dea584"></span>
                 <span class="legend-name">Rust</span>
-                <span class="legend-value">3.0 MB (17.9%)</span>
+                <span class="legend-value">3.3 MB (11.3%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#3178c6"></span>
                 <span class="legend-name">TypeScript</span>
-                <span class="legend-value">140.4 KB (0.8%)</span>
+                <span class="legend-value">160.1 KB (0.5%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#f1e05a"></span>
                 <span class="legend-name">JavaScript</span>
-                <span class="legend-value">46.0 KB (0.3%)</span>
+                <span class="legend-value">113.7 KB (0.4%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:#083fa1"></span>
+                <span class="legend-name">Markdown</span>
+                <span class="legend-value">8.6 KB (0.0%)</span>
             </li>
             
             <li>
@@ -1390,15 +1085,9 @@ body {
             </li>
             
             <li>
-                <span class="legend-swatch" style="background:#083fa1"></span>
-                <span class="legend-name">Markdown</span>
-                <span class="legend-value">4.7 KB (0.0%)</span>
-            </li>
-            
-            <li>
                 <span class="legend-swatch" style="background:#9c4221"></span>
                 <span class="legend-name">TOML</span>
-                <span class="legend-value">4.2 KB (0.0%)</span>
+                <span class="legend-value">4.5 KB (0.0%)</span>
             </li>
             
             <li>
@@ -1408,21 +1097,21 @@ body {
             </li>
             
             <li>
+                <span class="legend-swatch" style="background:#cb171e"></span>
+                <span class="legend-name">YAML</span>
+                <span class="legend-value">3.5 KB (0.0%)</span>
+            </li>
+            
+            <li>
                 <span class="legend-swatch" style="background:#427819"></span>
                 <span class="legend-name">Makefile</span>
                 <span class="legend-value">2.5 KB (0.0%)</span>
             </li>
             
             <li>
-                <span class="legend-swatch" style="background:#cb171e"></span>
-                <span class="legend-name">YAML</span>
-                <span class="legend-value">2.4 KB (0.0%)</span>
-            </li>
-            
-            <li>
                 <span class="legend-swatch" style="background:#384d54"></span>
                 <span class="legend-name">Dockerfile</span>
-                <span class="legend-value">1.5 KB (0.0%)</span>
+                <span class="legend-value">1.6 KB (0.0%)</span>
             </li>
             
         </ul>
@@ -1437,12 +1126,12 @@ body {
         <header>
             <div>
                 <h2>drawnosaurus</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:01.838084+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.405389+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>419</strong></div>
+            <div><span class="label">Commits</span><strong>491</strong></div>
             <div><span class="label">Committers</span><strong>5</strong></div>
             <div><span class="label">Languages</span><strong>10</strong></div>
         </div>
@@ -1453,8 +1142,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 97.191 54.929 L 134.731 111.628 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 380 (90.7%)</title></path><path d="M 97.191 54.929 A 150.000 150.000 0 0 1 148.740 33.293 L 162.911 99.800 A 82.000 82.000 0 0 0 134.731 111.628 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 25 (6.0%)</title></path><path d="M 148.740 33.293 A 150.000 150.000 0 0 1 159.817 31.364 L 168.967 98.746 A 82.000 82.000 0 0 0 162.911 99.800 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>SMOSTAFAH1: 5 (1.2%)</title></path><path d="M 159.817 31.364 A 150.000 150.000 0 0 1 171.008 30.270 L 175.084 98.147 A 82.000 82.000 0 0 0 168.967 98.746 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 5 (1.2%)</title></path><path d="M 171.008 30.270 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 175.084 98.147 Z" fill="hsl(2.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 4 (1.0%)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">419</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 108.208 48.296 L 140.754 108.002 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 452 (92.1%)</title></path><path d="M 108.208 48.296 A 150.000 150.000 0 0 1 153.270 32.401 L 165.388 99.312 A 82.000 82.000 0 0 0 140.754 108.002 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 25 (5.1%)</title></path><path d="M 153.270 32.401 A 150.000 150.000 0 0 1 162.763 30.994 L 170.577 98.543 A 82.000 82.000 0 0 0 165.388 99.312 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>shashemi: 5 (1.0%)</title></path><path d="M 162.763 30.994 A 150.000 150.000 0 0 1 172.325 30.196 L 175.805 98.107 A 82.000 82.000 0 0 0 170.577 98.543 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 5 (1.0%)</title></path><path d="M 172.325 30.196 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 175.805 98.107 Z" fill="hsl(2.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 4 (0.8%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">491</text>
             <text x="180.0" y="196.0" class="pie-center-label">commits</text>
         </svg>
         <ul class="chart-legend">
@@ -1462,31 +1151,31 @@ body {
             <li>
                 <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
                 <span class="legend-name">dlesieur</span>
-                <span class="legend-value">380 (90.7%)</span>
+                <span class="legend-value">452 (92.1%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(309.5, 48%, 42%)"></span>
                 <span class="legend-name">danfern3</span>
-                <span class="legend-value">25 (6.0%)</span>
+                <span class="legend-value">25 (5.1%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(87.0, 48%, 42%)"></span>
-                <span class="legend-name">SMOSTAFAH1</span>
-                <span class="legend-value">5 (1.2%)</span>
+                <span class="legend-name">shashemi</span>
+                <span class="legend-value">5 (1.0%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(224.5, 48%, 42%)"></span>
                 <span class="legend-name">vjan-nie</span>
-                <span class="legend-value">5 (1.2%)</span>
+                <span class="legend-value">5 (1.0%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(2.0, 48%, 42%)"></span>
                 <span class="legend-name">GitHub</span>
-                <span class="legend-value">4 (1.0%)</span>
+                <span class="legend-value">4 (0.8%)</span>
             </li>
             
         </ul>
@@ -1498,8 +1187,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Language usage by bytes of code">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 70.285 282.287 L 120.023 235.917 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="#3178c6" stroke="#fffdf8" stroke-width="2"><title>TypeScript: 1.4 MB (63.1%) (198 files)</title></path><path d="M 70.285 282.287 A 150.000 150.000 0 0 1 38.087 131.412 L 102.421 153.439 A 82.000 82.000 0 0 0 120.023 235.917 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 390.6 KB (17.2%) (41 files)</title></path><path d="M 38.087 131.412 A 150.000 150.000 0 0 1 114.698 44.961 L 144.302 106.178 A 82.000 82.000 0 0 0 102.421 153.439 Z" fill="#ff3e00" stroke="#fffdf8" stroke-width="2"><title>Svelte: 285.8 KB (12.6%) (34 files)</title></path><path d="M 114.698 44.961 A 150.000 150.000 0 0 1 150.304 32.969 L 163.766 99.623 A 82.000 82.000 0 0 0 144.302 106.178 Z" fill="#292929" stroke="#fffdf8" stroke-width="2"><title>JSON: 90.8 KB (4.0%) (21 files)</title></path><path d="M 150.304 32.969 A 150.000 150.000 0 0 1 157.802 31.652 L 167.865 98.903 A 82.000 82.000 0 0 0 163.766 99.623 Z" fill="#427819" stroke="#fffdf8" stroke-width="2"><title>Makefile: 18.4 KB (0.8%) (1 files)</title></path><path d="M 157.802 31.652 A 150.000 150.000 0 0 1 164.972 30.755 L 171.785 98.413 A 82.000 82.000 0 0 0 167.865 98.903 Z" fill="#89e051" stroke="#fffdf8" stroke-width="2"><title>Shell: 17.4 KB (0.8%) (5 files)</title></path><path d="M 164.972 30.755 A 150.000 150.000 0 0 1 171.077 30.266 L 175.122 98.145 A 82.000 82.000 0 0 0 171.785 98.413 Z" fill="#cb171e" stroke="#fffdf8" stroke-width="2"><title>YAML: 14.8 KB (0.6%) (3 files)</title></path><path d="M 171.077 30.266 A 150.000 150.000 0 0 1 175.560 30.066 L 177.573 98.036 A 82.000 82.000 0 0 0 175.122 98.145 Z" fill="#563d7c" stroke="#fffdf8" stroke-width="2"><title>CSS: 10.8 KB (0.5%) (3 files)</title></path><path d="M 175.560 30.066 A 150.000 150.000 0 0 1 179.766 30.000 L 179.872 98.000 A 82.000 82.000 0 0 0 177.573 98.036 Z" fill="#f1e05a" stroke="#fffdf8" stroke-width="2"><title>JavaScript: 10.1 KB (0.4%) (4 files)</title></path><path d="M 179.766 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.872 98.000 Z" fill="#e34c26" stroke="#fffdf8" stroke-width="2"><title>HTML: 577 B (0.0%) (2 files)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">2.2 MB</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 108.464 311.843 L 140.893 252.074 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="#3178c6" stroke="#fffdf8" stroke-width="2"><title>TypeScript: 1.6 MB (57.9%) (226 files)</title></path><path d="M 108.464 311.843 A 150.000 150.000 0 0 1 30.003 180.956 L 98.002 180.523 A 82.000 82.000 0 0 0 140.893 252.074 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 494.4 KB (17.0%) (73 files)</title></path><path d="M 30.003 180.956 A 150.000 150.000 0 0 1 61.147 88.491 L 115.027 129.975 A 82.000 82.000 0 0 0 98.002 180.523 Z" fill="#ff3e00" stroke="#fffdf8" stroke-width="2"><title>Svelte: 306.9 KB (10.5%) (36 files)</title></path><path d="M 61.147 88.491 A 150.000 150.000 0 0 1 129.921 38.607 L 152.623 102.705 A 82.000 82.000 0 0 0 115.027 129.975 Z" fill="#e34c26" stroke="#fffdf8" stroke-width="2"><title>HTML: 266.0 KB (9.1%) (4 files)</title></path><path d="M 129.921 38.607 A 150.000 150.000 0 0 1 156.173 31.905 L 166.974 99.041 A 82.000 82.000 0 0 0 152.623 102.705 Z" fill="#292929" stroke="#fffdf8" stroke-width="2"><title>JSON: 83.8 KB (2.9%) (21 files)</title></path><path d="M 156.173 31.905 A 150.000 150.000 0 0 1 162.484 31.026 L 170.424 98.561 A 82.000 82.000 0 0 0 166.974 99.041 Z" fill="#427819" stroke="#fffdf8" stroke-width="2"><title>Makefile: 19.7 KB (0.7%) (1 files)</title></path><path d="M 162.484 31.026 A 150.000 150.000 0 0 1 168.096 30.473 L 173.492 98.259 A 82.000 82.000 0 0 0 170.424 98.561 Z" fill="#89e051" stroke="#fffdf8" stroke-width="2"><title>Shell: 17.4 KB (0.6%) (5 files)</title></path><path d="M 168.096 30.473 A 150.000 150.000 0 0 1 172.963 30.165 L 176.153 98.090 A 82.000 82.000 0 0 0 173.492 98.259 Z" fill="#cb171e" stroke="#fffdf8" stroke-width="2"><title>YAML: 15.1 KB (0.5%) (3 files)</title></path><path d="M 172.963 30.165 A 150.000 150.000 0 0 1 176.717 30.036 L 178.205 98.020 A 82.000 82.000 0 0 0 176.153 98.090 Z" fill="#563d7c" stroke="#fffdf8" stroke-width="2"><title>CSS: 11.6 KB (0.4%) (3 files)</title></path><path d="M 176.717 30.036 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 178.205 98.020 Z" fill="#f1e05a" stroke="#fffdf8" stroke-width="2"><title>JavaScript: 10.1 KB (0.3%) (4 files)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">2.8 MB</text>
             <text x="180.0" y="196.0" class="pie-center-label">code</text>
         </svg>
         <ul class="chart-legend">
@@ -1507,61 +1196,61 @@ body {
             <li>
                 <span class="legend-swatch" style="background:#3178c6"></span>
                 <span class="legend-name">TypeScript</span>
-                <span class="legend-value">1.4 MB (63.1%)</span>
+                <span class="legend-value">1.6 MB (57.9%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#083fa1"></span>
                 <span class="legend-name">Markdown</span>
-                <span class="legend-value">390.6 KB (17.2%)</span>
+                <span class="legend-value">494.4 KB (17.0%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#ff3e00"></span>
                 <span class="legend-name">Svelte</span>
-                <span class="legend-value">285.8 KB (12.6%)</span>
-            </li>
-            
-            <li>
-                <span class="legend-swatch" style="background:#292929"></span>
-                <span class="legend-name">JSON</span>
-                <span class="legend-value">90.8 KB (4.0%)</span>
-            </li>
-            
-            <li>
-                <span class="legend-swatch" style="background:#427819"></span>
-                <span class="legend-name">Makefile</span>
-                <span class="legend-value">18.4 KB (0.8%)</span>
-            </li>
-            
-            <li>
-                <span class="legend-swatch" style="background:#89e051"></span>
-                <span class="legend-name">Shell</span>
-                <span class="legend-value">17.4 KB (0.8%)</span>
-            </li>
-            
-            <li>
-                <span class="legend-swatch" style="background:#cb171e"></span>
-                <span class="legend-name">YAML</span>
-                <span class="legend-value">14.8 KB (0.6%)</span>
-            </li>
-            
-            <li>
-                <span class="legend-swatch" style="background:#563d7c"></span>
-                <span class="legend-name">CSS</span>
-                <span class="legend-value">10.8 KB (0.5%)</span>
-            </li>
-            
-            <li>
-                <span class="legend-swatch" style="background:#f1e05a"></span>
-                <span class="legend-name">JavaScript</span>
-                <span class="legend-value">10.1 KB (0.4%)</span>
+                <span class="legend-value">306.9 KB (10.5%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#e34c26"></span>
                 <span class="legend-name">HTML</span>
-                <span class="legend-value">577 B (0.0%)</span>
+                <span class="legend-value">266.0 KB (9.1%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:#292929"></span>
+                <span class="legend-name">JSON</span>
+                <span class="legend-value">83.8 KB (2.9%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:#427819"></span>
+                <span class="legend-name">Makefile</span>
+                <span class="legend-value">19.7 KB (0.7%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:#89e051"></span>
+                <span class="legend-name">Shell</span>
+                <span class="legend-value">17.4 KB (0.6%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:#cb171e"></span>
+                <span class="legend-name">YAML</span>
+                <span class="legend-value">15.1 KB (0.5%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:#563d7c"></span>
+                <span class="legend-name">CSS</span>
+                <span class="legend-value">11.6 KB (0.4%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:#f1e05a"></span>
+                <span class="legend-name">JavaScript</span>
+                <span class="legend-value">10.1 KB (0.3%)</span>
             </li>
             
         </ul>
@@ -1576,24 +1265,58 @@ body {
         <header>
             <div>
                 <h2>email-api</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:01.861702+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.413892+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>0</strong></div>
-            <div><span class="label">Committers</span><strong>0</strong></div>
-            <div><span class="label">Languages</span><strong>0</strong></div>
+            <div><span class="label">Commits</span><strong>1</strong></div>
+            <div><span class="label">Committers</span><strong>1</strong></div>
+            <div><span class="label">Languages</span><strong>1</strong></div>
         </div>
         
         <div class="repo-charts">
             <div class="chart-panel">
                 <h3>Committers</h3>
-                <p class="empty">No committer counts stored for this repository.</p>
+                
+    <div class="chart-layout">
+        <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 180.000 330.000 A 150.000 150.000 0 1 1 180.000 30.000 M 180.000 98.000 A 82.000 82.000 0 1 0 180.000 262.000 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>shashemi: 1 (100.0%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">1</text>
+            <text x="180.0" y="196.0" class="pie-center-label">commits</text>
+        </svg>
+        <ul class="chart-legend">
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
+                <span class="legend-name">shashemi</span>
+                <span class="legend-value">1 (100.0%)</span>
+            </li>
+            
+        </ul>
+    </div>
+    
             </div>
             <div class="chart-panel">
                 <h3>Languages</h3>
-                <p class="empty">No language data stored for this repository.</p>
+                
+    <div class="chart-layout">
+        <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Language usage by bytes of code">
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 180.000 330.000 A 150.000 150.000 0 1 1 180.000 30.000 M 180.000 98.000 A 82.000 82.000 0 1 0 180.000 262.000 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 12 B (100.0%) (1 files)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">12 B</text>
+            <text x="180.0" y="196.0" class="pie-center-label">code</text>
+        </svg>
+        <ul class="chart-legend">
+            
+            <li>
+                <span class="legend-swatch" style="background:#083fa1"></span>
+                <span class="legend-name">Markdown</span>
+                <span class="legend-value">12 B (100.0%)</span>
+            </li>
+            
+        </ul>
+    </div>
+    
             </div>
         </div>
     </section>
@@ -1603,7 +1326,7 @@ body {
         <header>
             <div>
                 <h2>formula-engine</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:01.881370+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.425442+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -1694,12 +1417,12 @@ body {
         <header>
             <div>
                 <h2>grobase</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:01.950150+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.516939+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>1155</strong></div>
+            <div><span class="label">Commits</span><strong>1206</strong></div>
             <div><span class="label">Committers</span><strong>4</strong></div>
             <div><span class="label">Languages</span><strong>22</strong></div>
         </div>
@@ -1710,8 +1433,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 88.241 61.339 L 129.839 115.132 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 1034 (89.5%)</title></path><path d="M 88.241 61.339 A 150.000 150.000 0 0 1 142.065 34.876 L 159.262 100.666 A 82.000 82.000 0 0 0 129.839 115.132 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 74 (6.4%)</title></path><path d="M 142.065 34.876 A 150.000 150.000 0 0 1 167.774 30.499 L 173.316 98.273 A 82.000 82.000 0 0 0 159.262 100.666 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 32 (2.8%)</title></path><path d="M 167.774 30.499 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 173.316 98.273 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 15 (1.3%)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">1155</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 95.410 56.127 L 133.757 112.283 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 1091 (90.5%)</title></path><path d="M 95.410 56.127 A 150.000 150.000 0 0 1 148.202 33.409 L 162.617 99.864 A 82.000 82.000 0 0 0 133.757 112.283 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 74 (6.1%)</title></path><path d="M 148.202 33.409 A 150.000 150.000 0 0 1 172.969 30.165 L 176.156 98.090 A 82.000 82.000 0 0 0 162.617 99.864 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 32 (2.7%)</title></path><path d="M 172.969 30.165 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 176.156 98.090 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 9 (0.7%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">1206</text>
             <text x="180.0" y="196.0" class="pie-center-label">commits</text>
         </svg>
         <ul class="chart-legend">
@@ -1719,25 +1442,25 @@ body {
             <li>
                 <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
                 <span class="legend-name">dlesieur</span>
-                <span class="legend-value">1034 (89.5%)</span>
+                <span class="legend-value">1091 (90.5%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(309.5, 48%, 42%)"></span>
                 <span class="legend-name">danfern3</span>
-                <span class="legend-value">74 (6.4%)</span>
+                <span class="legend-value">74 (6.1%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(87.0, 48%, 42%)"></span>
                 <span class="legend-name">GitHub</span>
-                <span class="legend-value">32 (2.8%)</span>
+                <span class="legend-value">32 (2.7%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(224.5, 48%, 42%)"></span>
                 <span class="legend-name">vjan-nie</span>
-                <span class="legend-value">15 (1.3%)</span>
+                <span class="legend-value">9 (0.7%)</span>
             </li>
             
         </ul>
@@ -1749,8 +1472,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Language usage by bytes of code">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 0 1 323.856 222.489 L 258.642 203.227 A 82.000 82.000 0 0 0 180.000 98.000 Z" fill="#292929" stroke="#fffdf8" stroke-width="2"><title>JSON: 9.9 MB (29.6%) (116 files)</title></path><path d="M 323.856 222.489 A 150.000 150.000 0 0 1 263.297 304.746 L 225.536 248.195 A 82.000 82.000 0 0 0 258.642 203.227 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 3.7 MB (11.1%) (580 files)</title></path><path d="M 263.297 304.746 A 150.000 150.000 0 0 1 168.099 329.527 L 173.494 261.741 A 82.000 82.000 0 0 0 225.536 248.195 Z" fill="#89e051" stroke="#fffdf8" stroke-width="2"><title>Shell: 3.6 MB (10.6%) (400 files)</title></path><path d="M 168.099 329.527 A 150.000 150.000 0 0 1 80.647 292.378 L 125.687 241.434 A 82.000 82.000 0 0 0 173.494 261.741 Z" fill="#e34c26" stroke="#fffdf8" stroke-width="2"><title>HTML: 3.4 MB (10.3%) (25 files)</title></path><path d="M 80.647 292.378 A 150.000 150.000 0 0 1 35.672 220.860 L 101.101 202.337 A 82.000 82.000 0 0 0 125.687 241.434 Z" fill="#3178c6" stroke="#fffdf8" stroke-width="2"><title>TypeScript: 3.1 MB (9.1%) (968 files)</title></path><path d="M 35.672 220.860 A 150.000 150.000 0 0 1 33.139 149.473 L 99.716 163.312 A 82.000 82.000 0 0 0 101.101 202.337 Z" fill="#dea584" stroke="#fffdf8" stroke-width="2"><title>Rust: 2.6 MB (7.7%) (261 files)</title></path><path d="M 33.139 149.473 A 150.000 150.000 0 0 1 60.806 88.935 L 114.841 130.218 A 82.000 82.000 0 0 0 99.716 163.312 Z" fill="#00ADD8" stroke="#fffdf8" stroke-width="2"><title>Go: 2.4 MB (7.1%) (658 files)</title></path><path d="M 60.806 88.935 A 150.000 150.000 0 0 1 87.757 61.716 L 129.574 115.338 A 82.000 82.000 0 0 0 114.841 130.218 Z" fill="#f1e05a" stroke="#fffdf8" stroke-width="2"><title>JavaScript: 1.4 MB (4.1%) (289 files)</title></path><path d="M 87.757 61.716 A 150.000 150.000 0 0 1 102.867 51.351 L 137.834 109.672 A 82.000 82.000 0 0 0 129.574 115.338 Z" fill="#3572A5" stroke="#fffdf8" stroke-width="2"><title>Python: 669.0 KB (1.9%) (89 files)</title></path><path d="M 102.867 51.351 A 150.000 150.000 0 0 1 118.574 43.154 L 146.421 105.191 A 82.000 82.000 0 0 0 137.834 109.672 Z" fill="#e38c00" stroke="#fffdf8" stroke-width="2"><title>SQL: 646.9 KB (1.9%) (176 files)</title></path><path d="M 118.574 43.154 A 150.000 150.000 0 0 1 131.753 37.971 L 153.625 102.357 A 82.000 82.000 0 0 0 146.421 105.191 Z" fill="#cb171e" stroke="#fffdf8" stroke-width="2"><title>YAML: 516.9 KB (1.5%) (108 files)</title></path><path d="M 131.753 37.971 A 150.000 150.000 0 0 1 144.541 34.251 L 160.616 100.324 A 82.000 82.000 0 0 0 153.625 102.357 Z" fill="#563d7c" stroke="#fffdf8" stroke-width="2"><title>CSS: 486.1 KB (1.4%) (115 files)</title></path><path d="M 144.541 34.251 A 150.000 150.000 0 0 1 152.038 32.629 L 164.714 99.437 A 82.000 82.000 0 0 0 160.616 100.324 Z" fill="#00B4AB" stroke="#fffdf8" stroke-width="2"><title>Dart: 280.0 KB (0.8%) (86 files)</title></path><path d="M 152.038 32.629 A 150.000 150.000 0 0 1 158.671 31.524 L 168.340 98.833 A 82.000 82.000 0 0 0 164.714 99.437 Z" fill="#A97BFF" stroke="#fffdf8" stroke-width="2"><title>Kotlin: 245.4 KB (0.7%) (91 files)</title></path><path d="M 158.671 31.524 A 150.000 150.000 0 0 1 164.669 30.785 L 171.619 98.429 A 82.000 82.000 0 0 0 168.340 98.833 Z" fill="#c6538c" stroke="#fffdf8" stroke-width="2"><title>SCSS: 220.5 KB (0.6%) (31 files)</title></path><path d="M 164.669 30.785 A 150.000 150.000 0 0 1 169.644 30.358 L 174.339 98.196 A 82.000 82.000 0 0 0 171.619 98.429 Z" fill="#4F5D95" stroke="#fffdf8" stroke-width="2"><title>PHP: 182.2 KB (0.5%) (34 files)</title></path><path d="M 169.644 30.358 A 150.000 150.000 0 0 1 173.846 30.126 L 176.636 98.069 A 82.000 82.000 0 0 0 174.339 98.196 Z" fill="#F05138" stroke="#fffdf8" stroke-width="2"><title>Swift: 153.6 KB (0.4%) (51 files)</title></path><path d="M 173.846 30.126 A 150.000 150.000 0 0 1 177.312 30.024 L 178.531 98.013 A 82.000 82.000 0 0 0 176.636 98.069 Z" fill="#384d54" stroke="#fffdf8" stroke-width="2"><title>Dockerfile: 126.5 KB (0.4%) (53 files)</title></path><path d="M 177.312 30.024 A 150.000 150.000 0 0 1 178.669 30.006 L 179.272 98.003 A 82.000 82.000 0 0 0 178.531 98.013 Z" fill="#427819" stroke="#fffdf8" stroke-width="2"><title>Makefile: 49.5 KB (0.1%) (7 files)</title></path><path d="M 178.669 30.006 A 150.000 150.000 0 0 1 179.815 30.000 L 179.899 98.000 A 82.000 82.000 0 0 0 179.272 98.003 Z" fill="#9c4221" stroke="#fffdf8" stroke-width="2"><title>TOML: 41.8 KB (0.1%) (27 files)</title></path><path d="M 179.815 30.000 A 150.000 150.000 0 0 1 179.999 30.000 L 179.999 98.000 A 82.000 82.000 0 0 0 179.899 98.000 Z" fill="#0060ac" stroke="#fffdf8" stroke-width="2"><title>XML: 6.7 KB (0.0%) (8 files)</title></path><path d="M 179.999 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.999 98.000 Z" fill="#555555" stroke="#fffdf8" stroke-width="2"><title>C: 38 B (0.0%) (1 files)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">33.6 MB</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 0 1 326.621 211.660 L 260.153 197.308 A 82.000 82.000 0 0 0 180.000 98.000 Z" fill="#292929" stroke="#fffdf8" stroke-width="2"><title>JSON: 9.7 MB (28.4%) (117 files)</title></path><path d="M 326.621 211.660 A 150.000 150.000 0 0 1 268.025 301.457 L 228.120 246.396 A 82.000 82.000 0 0 0 260.153 197.308 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 4.0 MB (11.6%) (637 files)</title></path><path d="M 268.025 301.457 A 150.000 150.000 0 0 1 166.645 329.404 L 172.699 261.674 A 82.000 82.000 0 0 0 228.120 246.396 Z" fill="#89e051" stroke="#fffdf8" stroke-width="2"><title>Shell: 3.9 MB (11.4%) (439 files)</title></path><path d="M 166.645 329.404 A 150.000 150.000 0 0 1 81.022 292.709 L 125.892 241.615 A 82.000 82.000 0 0 0 172.699 261.674 Z" fill="#e34c26" stroke="#fffdf8" stroke-width="2"><title>HTML: 3.4 MB (10.1%) (25 files)</title></path><path d="M 81.022 292.709 A 150.000 150.000 0 0 1 35.193 219.127 L 100.839 201.390 A 82.000 82.000 0 0 0 125.892 241.615 Z" fill="#3178c6" stroke="#fffdf8" stroke-width="2"><title>TypeScript: 3.2 MB (9.3%) (994 files)</title></path><path d="M 35.193 219.127 A 150.000 150.000 0 0 1 33.288 148.766 L 99.797 162.926 A 82.000 82.000 0 0 0 100.839 201.390 Z" fill="#dea584" stroke="#fffdf8" stroke-width="2"><title>Rust: 2.6 MB (7.5%) (263 files)</title></path><path d="M 33.288 148.766 A 150.000 150.000 0 0 1 61.027 88.647 L 114.961 130.060 A 82.000 82.000 0 0 0 99.797 162.926 Z" fill="#00ADD8" stroke="#fffdf8" stroke-width="2"><title>Go: 2.4 MB (7.1%) (672 files)</title></path><path d="M 61.027 88.647 A 150.000 150.000 0 0 1 87.439 61.964 L 129.400 115.474 A 82.000 82.000 0 0 0 114.961 130.060 Z" fill="#f1e05a" stroke="#fffdf8" stroke-width="2"><title>JavaScript: 1.4 MB (4.0%) (289 files)</title></path><path d="M 87.439 61.964 A 150.000 150.000 0 0 1 102.486 51.580 L 137.626 109.797 A 82.000 82.000 0 0 0 129.400 115.474 Z" fill="#3572A5" stroke="#fffdf8" stroke-width="2"><title>Python: 681.3 KB (1.9%) (90 files)</title></path><path d="M 102.486 51.580 A 150.000 150.000 0 0 1 117.916 43.451 L 146.061 105.353 A 82.000 82.000 0 0 0 137.626 109.797 Z" fill="#e38c00" stroke="#fffdf8" stroke-width="2"><title>SQL: 649.9 KB (1.9%) (178 files)</title></path><path d="M 117.916 43.451 A 150.000 150.000 0 0 1 132.623 37.678 L 154.101 102.198 A 82.000 82.000 0 0 0 146.061 105.353 Z" fill="#cb171e" stroke="#fffdf8" stroke-width="2"><title>YAML: 588.7 KB (1.7%) (109 files)</title></path><path d="M 132.623 37.678 A 150.000 150.000 0 0 1 145.170 34.100 L 160.960 100.241 A 82.000 82.000 0 0 0 154.101 102.198 Z" fill="#563d7c" stroke="#fffdf8" stroke-width="2"><title>CSS: 486.1 KB (1.4%) (115 files)</title></path><path d="M 145.170 34.100 A 150.000 150.000 0 0 1 152.522 32.538 L 164.979 99.388 A 82.000 82.000 0 0 0 160.960 100.241 Z" fill="#00B4AB" stroke="#fffdf8" stroke-width="2"><title>Dart: 280.0 KB (0.8%) (86 files)</title></path><path d="M 152.522 32.538 A 150.000 150.000 0 0 1 159.023 31.474 L 168.533 98.806 A 82.000 82.000 0 0 0 164.979 99.388 Z" fill="#A97BFF" stroke="#fffdf8" stroke-width="2"><title>Kotlin: 245.4 KB (0.7%) (91 files)</title></path><path d="M 159.023 31.474 A 150.000 150.000 0 0 1 164.901 30.762 L 171.746 98.416 A 82.000 82.000 0 0 0 168.533 98.806 Z" fill="#c6538c" stroke="#fffdf8" stroke-width="2"><title>SCSS: 220.5 KB (0.6%) (31 files)</title></path><path d="M 164.901 30.762 A 150.000 150.000 0 0 1 169.776 30.349 L 174.411 98.191 A 82.000 82.000 0 0 0 171.746 98.416 Z" fill="#4F5D95" stroke="#fffdf8" stroke-width="2"><title>PHP: 182.2 KB (0.5%) (34 files)</title></path><path d="M 169.776 30.349 A 150.000 150.000 0 0 1 173.893 30.124 L 176.662 98.068 A 82.000 82.000 0 0 0 174.411 98.191 Z" fill="#F05138" stroke="#fffdf8" stroke-width="2"><title>Swift: 153.6 KB (0.4%) (51 files)</title></path><path d="M 173.893 30.124 A 150.000 150.000 0 0 1 177.367 30.023 L 178.561 98.013 A 82.000 82.000 0 0 0 176.662 98.068 Z" fill="#384d54" stroke="#fffdf8" stroke-width="2"><title>Dockerfile: 129.5 KB (0.4%) (53 files)</title></path><path d="M 177.367 30.023 A 150.000 150.000 0 0 1 178.696 30.006 L 179.287 98.003 A 82.000 82.000 0 0 0 178.561 98.013 Z" fill="#427819" stroke="#fffdf8" stroke-width="2"><title>Makefile: 49.5 KB (0.1%) (7 files)</title></path><path d="M 178.696 30.006 A 150.000 150.000 0 0 1 179.819 30.000 L 179.901 98.000 A 82.000 82.000 0 0 0 179.287 98.003 Z" fill="#9c4221" stroke="#fffdf8" stroke-width="2"><title>TOML: 41.8 KB (0.1%) (26 files)</title></path><path d="M 179.819 30.000 A 150.000 150.000 0 0 1 179.999 30.000 L 179.999 98.000 A 82.000 82.000 0 0 0 179.901 98.000 Z" fill="#0060ac" stroke="#fffdf8" stroke-width="2"><title>XML: 6.7 KB (0.0%) (8 files)</title></path><path d="M 179.999 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.999 98.000 Z" fill="#555555" stroke="#fffdf8" stroke-width="2"><title>C: 38 B (0.0%) (1 files)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">34.3 MB</text>
             <text x="180.0" y="196.0" class="pie-center-label">code</text>
         </svg>
         <ul class="chart-legend">
@@ -1758,37 +1481,37 @@ body {
             <li>
                 <span class="legend-swatch" style="background:#292929"></span>
                 <span class="legend-name">JSON</span>
-                <span class="legend-value">9.9 MB (29.6%)</span>
+                <span class="legend-value">9.7 MB (28.4%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#083fa1"></span>
                 <span class="legend-name">Markdown</span>
-                <span class="legend-value">3.7 MB (11.1%)</span>
+                <span class="legend-value">4.0 MB (11.6%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#89e051"></span>
                 <span class="legend-name">Shell</span>
-                <span class="legend-value">3.6 MB (10.6%)</span>
+                <span class="legend-value">3.9 MB (11.4%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#e34c26"></span>
                 <span class="legend-name">HTML</span>
-                <span class="legend-value">3.4 MB (10.3%)</span>
+                <span class="legend-value">3.4 MB (10.1%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#3178c6"></span>
                 <span class="legend-name">TypeScript</span>
-                <span class="legend-value">3.1 MB (9.1%)</span>
+                <span class="legend-value">3.2 MB (9.3%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#dea584"></span>
                 <span class="legend-name">Rust</span>
-                <span class="legend-value">2.6 MB (7.7%)</span>
+                <span class="legend-value">2.6 MB (7.5%)</span>
             </li>
             
             <li>
@@ -1800,25 +1523,25 @@ body {
             <li>
                 <span class="legend-swatch" style="background:#f1e05a"></span>
                 <span class="legend-name">JavaScript</span>
-                <span class="legend-value">1.4 MB (4.1%)</span>
+                <span class="legend-value">1.4 MB (4.0%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#3572A5"></span>
                 <span class="legend-name">Python</span>
-                <span class="legend-value">669.0 KB (1.9%)</span>
+                <span class="legend-value">681.3 KB (1.9%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#e38c00"></span>
                 <span class="legend-name">SQL</span>
-                <span class="legend-value">646.9 KB (1.9%)</span>
+                <span class="legend-value">649.9 KB (1.9%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:#cb171e"></span>
                 <span class="legend-name">YAML</span>
-                <span class="legend-value">516.9 KB (1.5%)</span>
+                <span class="legend-value">588.7 KB (1.7%)</span>
             </li>
             
             <li>
@@ -1860,7 +1583,7 @@ body {
             <li>
                 <span class="legend-swatch" style="background:#384d54"></span>
                 <span class="legend-name">Dockerfile</span>
-                <span class="legend-value">126.5 KB (0.4%)</span>
+                <span class="legend-value">129.5 KB (0.4%)</span>
             </li>
             
             <li>
@@ -1899,12 +1622,12 @@ body {
         <header>
             <div>
                 <h2>groot</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.007658+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.574061+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>740</strong></div>
+            <div><span class="label">Commits</span><strong>741</strong></div>
             <div><span class="label">Committers</span><strong>3</strong></div>
             <div><span class="label">Languages</span><strong>13</strong></div>
         </div>
@@ -1915,8 +1638,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 124.072 40.817 L 149.426 103.913 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 695 (93.9%)</title></path><path d="M 124.072 40.817 A 150.000 150.000 0 0 1 154.650 32.158 L 166.142 99.179 A 82.000 82.000 0 0 0 149.426 103.913 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 25 (3.4%)</title></path><path d="M 154.650 32.158 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 166.142 99.179 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 20 (2.7%)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">740</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 122.965 41.266 L 148.821 104.159 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 695 (93.8%)</title></path><path d="M 122.965 41.266 A 150.000 150.000 0 0 1 154.684 32.152 L 166.160 99.176 A 82.000 82.000 0 0 0 148.821 104.159 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 26 (3.5%)</title></path><path d="M 154.684 32.152 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 166.160 99.176 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 20 (2.7%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">741</text>
             <text x="180.0" y="196.0" class="pie-center-label">commits</text>
         </svg>
         <ul class="chart-legend">
@@ -1924,13 +1647,13 @@ body {
             <li>
                 <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
                 <span class="legend-name">dlesieur</span>
-                <span class="legend-value">695 (93.9%)</span>
+                <span class="legend-value">695 (93.8%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(309.5, 48%, 42%)"></span>
                 <span class="legend-name">vjan-nie</span>
-                <span class="legend-value">25 (3.4%)</span>
+                <span class="legend-value">26 (3.5%)</span>
             </li>
             
             <li>
@@ -2044,12 +1767,12 @@ body {
         <header>
             <div>
                 <h2>hellish</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.088253+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.656542+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>2990</strong></div>
+            <div><span class="label">Commits</span><strong>3000</strong></div>
             <div><span class="label">Committers</span><strong>5</strong></div>
             <div><span class="label">Languages</span><strong>10</strong></div>
         </div>
@@ -2060,8 +1783,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 119.662 42.671 L 147.015 104.927 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 2793 (93.4%)</title></path><path d="M 119.662 42.671 A 150.000 150.000 0 0 1 151.181 32.794 L 164.246 99.528 A 82.000 82.000 0 0 0 147.015 104.927 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 105 (3.5%)</title></path><path d="M 151.181 32.794 A 150.000 150.000 0 0 1 167.406 30.530 L 173.116 98.290 A 82.000 82.000 0 0 0 164.246 99.528 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>alcacere: 52 (1.7%)</title></path><path d="M 167.406 30.530 A 150.000 150.000 0 0 1 179.685 30.000 L 179.828 98.000 A 82.000 82.000 0 0 0 173.116 98.290 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>Claude: 39 (1.3%)</title></path><path d="M 179.685 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.828 98.000 Z" fill="hsl(2.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>serjimen: 1 (0.0%)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">2990</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 115.565 44.545 L 144.776 105.951 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 2788 (92.9%)</title></path><path d="M 115.565 44.545 A 150.000 150.000 0 0 1 148.813 33.278 L 162.951 99.792 A 82.000 82.000 0 0 0 144.776 105.951 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 112 (3.7%)</title></path><path d="M 148.813 33.278 A 150.000 150.000 0 0 1 164.946 30.757 L 171.770 98.414 A 82.000 82.000 0 0 0 162.951 99.792 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>alcacere: 52 (1.7%)</title></path><path d="M 164.946 30.757 A 150.000 150.000 0 0 1 179.686 30.000 L 179.828 98.000 A 82.000 82.000 0 0 0 171.770 98.414 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>Claude: 47 (1.6%)</title></path><path d="M 179.686 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.828 98.000 Z" fill="hsl(2.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>serjimen: 1 (0.0%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">3000</text>
             <text x="180.0" y="196.0" class="pie-center-label">commits</text>
         </svg>
         <ul class="chart-legend">
@@ -2069,13 +1792,13 @@ body {
             <li>
                 <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
                 <span class="legend-name">dlesieur</span>
-                <span class="legend-value">2793 (93.4%)</span>
+                <span class="legend-value">2788 (92.9%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(309.5, 48%, 42%)"></span>
                 <span class="legend-name">GitHub</span>
-                <span class="legend-value">105 (3.5%)</span>
+                <span class="legend-value">112 (3.7%)</span>
             </li>
             
             <li>
@@ -2087,7 +1810,7 @@ body {
             <li>
                 <span class="legend-swatch" style="background:hsl(224.5, 48%, 42%)"></span>
                 <span class="legend-name">Claude</span>
-                <span class="legend-value">39 (1.3%)</span>
+                <span class="legend-value">47 (1.6%)</span>
             </li>
             
             <li>
@@ -2183,12 +1906,12 @@ body {
         <header>
             <div>
                 <h2>hellishrc_plugins</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.153953+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.667803+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>35</strong></div>
+            <div><span class="label">Commits</span><strong>37</strong></div>
             <div><span class="label">Committers</span><strong>2</strong></div>
             <div><span class="label">Languages</span><strong>2</strong></div>
         </div>
@@ -2199,8 +1922,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 166.554 329.396 L 172.650 261.670 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>Claude: 18 (51.4%)</title></path><path d="M 166.554 329.396 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 172.650 261.670 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 17 (48.6%)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">35</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 142.203 325.160 L 159.338 259.354 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>Claude: 20 (54.1%)</title></path><path d="M 142.203 325.160 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 159.338 259.354 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 17 (45.9%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">37</text>
             <text x="180.0" y="196.0" class="pie-center-label">commits</text>
         </svg>
         <ul class="chart-legend">
@@ -2208,13 +1931,13 @@ body {
             <li>
                 <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
                 <span class="legend-name">Claude</span>
-                <span class="legend-value">18 (51.4%)</span>
+                <span class="legend-value">20 (54.1%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(309.5, 48%, 42%)"></span>
                 <span class="legend-name">dlesieur</span>
-                <span class="legend-value">17 (48.6%)</span>
+                <span class="legend-value">17 (45.9%)</span>
             </li>
             
         </ul>
@@ -2256,7 +1979,7 @@ body {
         <header>
             <div>
                 <h2>laboratory</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.183732+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.678452+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2377,7 +2100,7 @@ body {
         <header>
             <div>
                 <h2>libcss</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.219877+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.703117+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2492,7 +2215,7 @@ body {
         <header>
             <div>
                 <h2>libft</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.258751+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.780346+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2607,13 +2330,13 @@ body {
         <header>
             <div>
                 <h2>markdown-engine</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.302853+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.805131+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>363</strong></div>
-            <div><span class="label">Committers</span><strong>5</strong></div>
+            <div><span class="label">Commits</span><strong>364</strong></div>
+            <div><span class="label">Committers</span><strong>6</strong></div>
             <div><span class="label">Languages</span><strong>9</strong></div>
         </div>
         
@@ -2623,8 +2346,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 0 1 328.081 203.914 L 260.951 193.073 A 82.000 82.000 0 0 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>rstancu: 100 (27.5%)</title></path><path d="M 328.081 203.914 A 150.000 150.000 0 0 1 152.888 327.529 L 165.179 260.649 A 82.000 82.000 0 0 0 260.951 193.073 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 92 (25.3%)</title></path><path d="M 152.888 327.529 A 150.000 150.000 0 0 1 33.928 214.101 L 100.147 198.642 A 82.000 82.000 0 0 0 165.179 260.649 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 67 (18.5%)</title></path><path d="M 33.928 214.101 A 150.000 150.000 0 0 1 67.492 80.793 L 118.496 125.767 A 82.000 82.000 0 0 0 100.147 198.642 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 55 (15.2%)</title></path><path d="M 67.492 80.793 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 118.496 125.767 Z" fill="hsl(2.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>serjimen: 49 (13.5%)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">363</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 0 1 328.194 203.209 L 261.012 192.688 A 82.000 82.000 0 0 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>rstancu: 100 (27.5%)</title></path><path d="M 328.194 203.209 A 150.000 150.000 0 0 1 154.236 327.771 L 165.916 260.781 A 82.000 82.000 0 0 0 261.012 192.688 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 92 (25.3%)</title></path><path d="M 154.236 327.771 A 150.000 150.000 0 0 1 34.359 215.897 L 100.383 199.624 A 82.000 82.000 0 0 0 165.916 260.781 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 67 (18.4%)</title></path><path d="M 34.359 215.897 A 150.000 150.000 0 0 1 66.023 82.484 L 117.693 126.691 A 82.000 82.000 0 0 0 100.383 199.624 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 55 (15.1%)</title></path><path d="M 66.023 82.484 A 150.000 150.000 0 0 1 177.411 30.022 L 178.585 98.012 A 82.000 82.000 0 0 0 117.693 126.691 Z" fill="hsl(2.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>serjimen: 49 (13.5%)</title></path><path d="M 177.411 30.022 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 178.585 98.012 Z" fill="hsl(139.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>shashemi: 1 (0.3%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">364</text>
             <text x="180.0" y="196.0" class="pie-center-label">commits</text>
         </svg>
         <ul class="chart-legend">
@@ -2644,19 +2367,25 @@ body {
             <li>
                 <span class="legend-swatch" style="background:hsl(87.0, 48%, 42%)"></span>
                 <span class="legend-name">dlesieur</span>
-                <span class="legend-value">67 (18.5%)</span>
+                <span class="legend-value">67 (18.4%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(224.5, 48%, 42%)"></span>
                 <span class="legend-name">vjan-nie</span>
-                <span class="legend-value">55 (15.2%)</span>
+                <span class="legend-value">55 (15.1%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(2.0, 48%, 42%)"></span>
                 <span class="legend-name">serjimen</span>
                 <span class="legend-value">49 (13.5%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(139.5, 48%, 42%)"></span>
+                <span class="legend-name">shashemi</span>
+                <span class="legend-value">1 (0.3%)</span>
             </li>
             
         </ul>
@@ -2668,7 +2397,7 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Language usage by bytes of code">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 42.876 240.803 L 105.039 213.239 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="#3178c6" stroke="#fffdf8" stroke-width="2"><title>TypeScript: 369.0 KB (68.4%) (70 files)</title></path><path d="M 42.876 240.803 A 150.000 150.000 0 0 1 69.753 78.287 L 119.732 124.397 A 82.000 82.000 0 0 0 105.039 213.239 Z" fill="#f1e05a" stroke="#fffdf8" stroke-width="2"><title>JavaScript: 99.9 KB (18.5%) (21 files)</title></path><path d="M 69.753 78.287 A 150.000 150.000 0 0 1 137.331 36.197 L 156.674 101.388 A 82.000 82.000 0 0 0 119.732 124.397 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 46.2 KB (8.5%) (9 files)</title></path><path d="M 137.331 36.197 A 150.000 150.000 0 0 1 151.813 32.672 L 164.591 99.461 A 82.000 82.000 0 0 0 156.674 101.388 Z" fill="#563d7c" stroke="#fffdf8" stroke-width="2"><title>CSS: 8.5 KB (1.6%) (1 files)</title></path><path d="M 151.813 32.672 A 150.000 150.000 0 0 1 163.520 30.908 L 170.991 98.496 A 82.000 82.000 0 0 0 164.591 99.461 Z" fill="#427819" stroke="#fffdf8" stroke-width="2"><title>Makefile: 6.8 KB (1.3%) (1 files)</title></path><path d="M 163.520 30.908 A 150.000 150.000 0 0 1 172.121 30.207 L 175.693 98.113 A 82.000 82.000 0 0 0 170.991 98.496 Z" fill="#292929" stroke="#fffdf8" stroke-width="2"><title>JSON: 4.9 KB (0.9%) (4 files)</title></path><path d="M 172.121 30.207 A 150.000 150.000 0 0 1 175.201 30.077 L 177.377 98.042 A 82.000 82.000 0 0 0 175.693 98.113 Z" fill="#e34c26" stroke="#fffdf8" stroke-width="2"><title>HTML: 1.8 KB (0.3%) (1 files)</title></path><path d="M 175.201 30.077 A 150.000 150.000 0 0 1 178.193 30.011 L 179.012 98.006 A 82.000 82.000 0 0 0 177.377 98.042 Z" fill="#cb171e" stroke="#fffdf8" stroke-width="2"><title>YAML: 1.7 KB (0.3%) (2 files)</title></path><path d="M 178.193 30.011 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.012 98.006 Z" fill="#384d54" stroke="#fffdf8" stroke-width="2"><title>Dockerfile: 1.0 KB (0.2%) (1 files)</title></path>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 42.862 240.771 L 105.031 213.222 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="#3178c6" stroke="#fffdf8" stroke-width="2"><title>TypeScript: 369.0 KB (68.4%) (70 files)</title></path><path d="M 42.862 240.771 A 150.000 150.000 0 0 1 69.783 78.254 L 119.748 124.379 A 82.000 82.000 0 0 0 105.031 213.222 Z" fill="#f1e05a" stroke="#fffdf8" stroke-width="2"><title>JavaScript: 99.9 KB (18.5%) (21 files)</title></path><path d="M 69.783 78.254 A 150.000 150.000 0 0 1 137.378 36.183 L 156.700 101.380 A 82.000 82.000 0 0 0 119.748 124.379 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 46.2 KB (8.6%) (9 files)</title></path><path d="M 137.378 36.183 A 150.000 150.000 0 0 1 151.862 32.663 L 164.618 99.456 A 82.000 82.000 0 0 0 156.700 101.380 Z" fill="#563d7c" stroke="#fffdf8" stroke-width="2"><title>CSS: 8.5 KB (1.6%) (1 files)</title></path><path d="M 151.862 32.663 A 150.000 150.000 0 0 1 163.570 30.903 L 171.018 98.493 A 82.000 82.000 0 0 0 164.618 99.456 Z" fill="#427819" stroke="#fffdf8" stroke-width="2"><title>Makefile: 6.8 KB (1.3%) (1 files)</title></path><path d="M 163.570 30.903 A 150.000 150.000 0 0 1 172.172 30.204 L 175.721 98.112 A 82.000 82.000 0 0 0 171.018 98.493 Z" fill="#292929" stroke="#fffdf8" stroke-width="2"><title>JSON: 4.9 KB (0.9%) (4 files)</title></path><path d="M 172.172 30.204 A 150.000 150.000 0 0 1 175.252 30.075 L 177.404 98.041 A 82.000 82.000 0 0 0 175.721 98.112 Z" fill="#e34c26" stroke="#fffdf8" stroke-width="2"><title>HTML: 1.8 KB (0.3%) (1 files)</title></path><path d="M 175.252 30.075 A 150.000 150.000 0 0 1 178.244 30.010 L 179.040 98.006 A 82.000 82.000 0 0 0 177.404 98.041 Z" fill="#cb171e" stroke="#fffdf8" stroke-width="2"><title>YAML: 1.7 KB (0.3%) (2 files)</title></path><path d="M 178.244 30.010 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.040 98.006 Z" fill="#384d54" stroke="#fffdf8" stroke-width="2"><title>Dockerfile: 1.0 KB (0.2%) (1 files)</title></path>
             <text x="180.0" y="170.0" class="pie-center-value">539.8 KB</text>
             <text x="180.0" y="196.0" class="pie-center-label">code</text>
         </svg>
@@ -2689,7 +2418,7 @@ body {
             <li>
                 <span class="legend-swatch" style="background:#083fa1"></span>
                 <span class="legend-name">Markdown</span>
-                <span class="legend-value">46.2 KB (8.5%)</span>
+                <span class="legend-value">46.2 KB (8.6%)</span>
             </li>
             
             <li>
@@ -2740,7 +2469,7 @@ body {
         <header>
             <div>
                 <h2>markengine</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.338138+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.817963+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2879,7 +2608,7 @@ body {
         <header>
             <div>
                 <h2>mini-baas</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.371030+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.830680+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -2976,7 +2705,7 @@ body {
         <header>
             <div>
                 <h2>mini-baas-sdk</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.399937+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.841582+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3055,24 +2784,58 @@ body {
         <header>
             <div>
                 <h2>mongo-api</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.415339+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.849255+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>0</strong></div>
-            <div><span class="label">Committers</span><strong>0</strong></div>
-            <div><span class="label">Languages</span><strong>0</strong></div>
+            <div><span class="label">Commits</span><strong>1</strong></div>
+            <div><span class="label">Committers</span><strong>1</strong></div>
+            <div><span class="label">Languages</span><strong>1</strong></div>
         </div>
         
         <div class="repo-charts">
             <div class="chart-panel">
                 <h3>Committers</h3>
-                <p class="empty">No committer counts stored for this repository.</p>
+                
+    <div class="chart-layout">
+        <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 180.000 330.000 A 150.000 150.000 0 1 1 180.000 30.000 M 180.000 98.000 A 82.000 82.000 0 1 0 180.000 262.000 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>shashemi: 1 (100.0%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">1</text>
+            <text x="180.0" y="196.0" class="pie-center-label">commits</text>
+        </svg>
+        <ul class="chart-legend">
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
+                <span class="legend-name">shashemi</span>
+                <span class="legend-value">1 (100.0%)</span>
+            </li>
+            
+        </ul>
+    </div>
+    
             </div>
             <div class="chart-panel">
                 <h3>Languages</h3>
-                <p class="empty">No language data stored for this repository.</p>
+                
+    <div class="chart-layout">
+        <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Language usage by bytes of code">
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 180.000 330.000 A 150.000 150.000 0 1 1 180.000 30.000 M 180.000 98.000 A 82.000 82.000 0 1 0 180.000 262.000 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 12 B (100.0%) (1 files)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">12 B</text>
+            <text x="180.0" y="196.0" class="pie-center-label">code</text>
+        </svg>
+        <ul class="chart-legend">
+            
+            <li>
+                <span class="legend-swatch" style="background:#083fa1"></span>
+                <span class="legend-name">Markdown</span>
+                <span class="legend-value">12 B (100.0%)</span>
+            </li>
+            
+        </ul>
+    </div>
+    
             </div>
         </div>
     </section>
@@ -3082,7 +2845,7 @@ body {
         <header>
             <div>
                 <h2>monkey-bot</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.426470+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.859140+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3209,13 +2972,13 @@ body {
         <header>
             <div>
                 <h2>notion-database-sys</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.468171+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.898894+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>960</strong></div>
-            <div><span class="label">Committers</span><strong>3</strong></div>
+            <div><span class="label">Commits</span><strong>964</strong></div>
+            <div><span class="label">Committers</span><strong>4</strong></div>
             <div><span class="label">Languages</span><strong>14</strong></div>
         </div>
         
@@ -3225,8 +2988,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 134.582 37.041 L 155.172 101.849 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 913 (95.1%)</title></path><path d="M 134.582 37.041 A 150.000 150.000 0 0 1 173.130 30.157 L 176.244 98.086 A 82.000 82.000 0 0 0 155.172 101.849 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 40 (4.2%)</title></path><path d="M 173.130 30.157 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 176.244 98.086 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>rstancu: 7 (0.7%)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">960</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 131.052 38.211 L 153.242 102.489 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 913 (94.7%)</title></path><path d="M 131.052 38.211 A 150.000 150.000 0 0 1 169.255 30.385 L 174.126 98.211 A 82.000 82.000 0 0 0 153.242 102.489 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 40 (4.1%)</title></path><path d="M 169.255 30.385 A 150.000 150.000 0 0 1 176.090 30.051 L 177.862 98.028 A 82.000 82.000 0 0 0 174.126 98.211 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>rstancu: 7 (0.7%)</title></path><path d="M 176.090 30.051 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 177.862 98.028 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>shashemi: 4 (0.4%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">964</text>
             <text x="180.0" y="196.0" class="pie-center-label">commits</text>
         </svg>
         <ul class="chart-legend">
@@ -3234,19 +2997,25 @@ body {
             <li>
                 <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
                 <span class="legend-name">dlesieur</span>
-                <span class="legend-value">913 (95.1%)</span>
+                <span class="legend-value">913 (94.7%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(309.5, 48%, 42%)"></span>
                 <span class="legend-name">danfern3</span>
-                <span class="legend-value">40 (4.2%)</span>
+                <span class="legend-value">40 (4.1%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(87.0, 48%, 42%)"></span>
                 <span class="legend-name">rstancu</span>
                 <span class="legend-value">7 (0.7%)</span>
+            </li>
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(224.5, 48%, 42%)"></span>
+                <span class="legend-name">shashemi</span>
+                <span class="legend-value">4 (0.4%)</span>
             </li>
             
         </ul>
@@ -3258,7 +3027,7 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Language usage by bytes of code">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 0 1 236.217 319.067 L 210.732 256.023 A 82.000 82.000 0 0 0 180.000 98.000 Z" fill="#3178c6" stroke="#fffdf8" stroke-width="2"><title>TypeScript: 3.1 MB (43.9%) (654 files)</title></path><path d="M 236.217 319.067 A 150.000 150.000 0 0 1 73.393 74.477 L 121.722 122.314 A 82.000 82.000 0 0 0 210.732 256.023 Z" fill="#292929" stroke="#fffdf8" stroke-width="2"><title>JSON: 3.1 MB (43.5%) (41 files)</title></path><path d="M 73.393 74.477 A 150.000 150.000 0 0 1 104.837 50.190 L 138.911 109.037 A 82.000 82.000 0 0 0 121.722 122.314 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 307.6 KB (4.2%) (51 files)</title></path><path d="M 104.837 50.190 A 150.000 150.000 0 0 1 139.874 35.466 L 158.065 100.988 A 82.000 82.000 0 0 0 138.911 109.037 Z" fill="#e38c00" stroke="#fffdf8" stroke-width="2"><title>SQL: 294.2 KB (4.0%) (3 files)</title></path><path d="M 139.874 35.466 A 150.000 150.000 0 0 1 159.311 31.434 L 168.690 98.784 A 82.000 82.000 0 0 0 158.065 100.988 Z" fill="#563d7c" stroke="#fffdf8" stroke-width="2"><title>CSS: 153.3 KB (2.1%) (6 files)</title></path><path d="M 159.311 31.434 A 150.000 150.000 0 0 1 165.927 30.662 L 172.307 98.362 A 82.000 82.000 0 0 0 168.690 98.784 Z" fill="#89e051" stroke="#fffdf8" stroke-width="2"><title>Shell: 51.4 KB (0.7%) (12 files)</title></path><path d="M 165.927 30.662 A 150.000 150.000 0 0 1 170.413 30.307 L 174.759 98.168 A 82.000 82.000 0 0 0 172.307 98.362 Z" fill="#427819" stroke="#fffdf8" stroke-width="2"><title>Makefile: 34.7 KB (0.5%) (3 files)</title></path><path d="M 170.413 30.307 A 150.000 150.000 0 0 1 173.350 30.147 L 176.365 98.081 A 82.000 82.000 0 0 0 174.759 98.168 Z" fill="#cb171e" stroke="#fffdf8" stroke-width="2"><title>YAML: 22.7 KB (0.3%) (6 files)</title></path><path d="M 173.350 30.147 A 150.000 150.000 0 0 1 176.277 30.046 L 177.965 98.025 A 82.000 82.000 0 0 0 176.365 98.081 Z" fill="#f1e05a" stroke="#fffdf8" stroke-width="2"><title>JavaScript: 22.6 KB (0.3%) (7 files)</title></path><path d="M 176.277 30.046 A 150.000 150.000 0 0 1 178.155 30.011 L 178.992 98.006 A 82.000 82.000 0 0 0 177.965 98.025 Z" fill="#3572A5" stroke="#fffdf8" stroke-width="2"><title>Python: 14.5 KB (0.2%) (2 files)</title></path><path d="M 178.155 30.011 A 150.000 150.000 0 0 1 179.147 30.002 L 179.533 98.001 A 82.000 82.000 0 0 0 178.992 98.006 Z" fill="#dea584" stroke="#fffdf8" stroke-width="2"><title>Rust: 7.7 KB (0.1%) (2 files)</title></path><path d="M 179.147 30.002 A 150.000 150.000 0 0 1 179.736 30.000 L 179.856 98.000 A 82.000 82.000 0 0 0 179.533 98.001 Z" fill="#384d54" stroke="#fffdf8" stroke-width="2"><title>Dockerfile: 4.6 KB (0.1%) (6 files)</title></path><path d="M 179.736 30.000 A 150.000 150.000 0 0 1 179.930 30.000 L 179.962 98.000 A 82.000 82.000 0 0 0 179.856 98.000 Z" fill="#e34c26" stroke="#fffdf8" stroke-width="2"><title>HTML: 1.5 KB (0.0%) (3 files)</title></path><path d="M 179.930 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.962 98.000 Z" fill="#9c4221" stroke="#fffdf8" stroke-width="2"><title>TOML: 552 B (0.0%) (2 files)</title></path>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 0 1 236.101 319.114 L 210.669 256.049 A 82.000 82.000 0 0 0 180.000 98.000 Z" fill="#3178c6" stroke="#fffdf8" stroke-width="2"><title>TypeScript: 3.1 MB (43.9%) (654 files)</title></path><path d="M 236.101 319.114 A 150.000 150.000 0 0 1 73.426 74.445 L 121.739 122.297 A 82.000 82.000 0 0 0 210.669 256.049 Z" fill="#292929" stroke="#fffdf8" stroke-width="2"><title>JSON: 3.1 MB (43.5%) (41 files)</title></path><path d="M 73.426 74.445 A 150.000 150.000 0 0 1 104.870 50.171 L 138.929 109.027 A 82.000 82.000 0 0 0 121.739 122.297 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 307.6 KB (4.2%) (51 files)</title></path><path d="M 104.870 50.171 A 150.000 150.000 0 0 1 139.904 35.458 L 158.081 100.984 A 82.000 82.000 0 0 0 138.929 109.027 Z" fill="#e38c00" stroke="#fffdf8" stroke-width="2"><title>SQL: 294.2 KB (4.0%) (3 files)</title></path><path d="M 139.904 35.458 A 150.000 150.000 0 0 1 159.338 31.430 L 168.705 98.782 A 82.000 82.000 0 0 0 158.081 100.984 Z" fill="#563d7c" stroke="#fffdf8" stroke-width="2"><title>CSS: 153.3 KB (2.1%) (6 files)</title></path><path d="M 159.338 31.430 A 150.000 150.000 0 0 1 165.952 30.659 L 172.321 98.360 A 82.000 82.000 0 0 0 168.705 98.782 Z" fill="#89e051" stroke="#fffdf8" stroke-width="2"><title>Shell: 51.4 KB (0.7%) (12 files)</title></path><path d="M 165.952 30.659 A 150.000 150.000 0 0 1 170.438 30.305 L 174.773 98.167 A 82.000 82.000 0 0 0 172.321 98.360 Z" fill="#427819" stroke="#fffdf8" stroke-width="2"><title>Makefile: 34.7 KB (0.5%) (3 files)</title></path><path d="M 170.438 30.305 A 150.000 150.000 0 0 1 173.374 30.146 L 176.378 98.080 A 82.000 82.000 0 0 0 174.773 98.167 Z" fill="#cb171e" stroke="#fffdf8" stroke-width="2"><title>YAML: 22.7 KB (0.3%) (6 files)</title></path><path d="M 173.374 30.146 A 150.000 150.000 0 0 1 176.301 30.046 L 177.978 98.025 A 82.000 82.000 0 0 0 176.378 98.080 Z" fill="#f1e05a" stroke="#fffdf8" stroke-width="2"><title>JavaScript: 22.6 KB (0.3%) (7 files)</title></path><path d="M 176.301 30.046 A 150.000 150.000 0 0 1 178.178 30.011 L 179.004 98.006 A 82.000 82.000 0 0 0 177.978 98.025 Z" fill="#3572A5" stroke="#fffdf8" stroke-width="2"><title>Python: 14.5 KB (0.2%) (2 files)</title></path><path d="M 178.178 30.011 A 150.000 150.000 0 0 1 179.170 30.002 L 179.546 98.001 A 82.000 82.000 0 0 0 179.004 98.006 Z" fill="#dea584" stroke="#fffdf8" stroke-width="2"><title>Rust: 7.7 KB (0.1%) (2 files)</title></path><path d="M 179.170 30.002 A 150.000 150.000 0 0 1 179.736 30.000 L 179.856 98.000 A 82.000 82.000 0 0 0 179.546 98.001 Z" fill="#384d54" stroke="#fffdf8" stroke-width="2"><title>Dockerfile: 4.4 KB (0.1%) (6 files)</title></path><path d="M 179.736 30.000 A 150.000 150.000 0 0 1 179.930 30.000 L 179.962 98.000 A 82.000 82.000 0 0 0 179.856 98.000 Z" fill="#e34c26" stroke="#fffdf8" stroke-width="2"><title>HTML: 1.5 KB (0.0%) (3 files)</title></path><path d="M 179.930 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.962 98.000 Z" fill="#9c4221" stroke="#fffdf8" stroke-width="2"><title>TOML: 552 B (0.0%) (2 files)</title></path>
             <text x="180.0" y="170.0" class="pie-center-value">7.1 MB</text>
             <text x="180.0" y="196.0" class="pie-center-label">code</text>
         </svg>
@@ -3333,7 +3102,7 @@ body {
             <li>
                 <span class="legend-swatch" style="background:#384d54"></span>
                 <span class="legend-name">Dockerfile</span>
-                <span class="legend-value">4.6 KB (0.1%)</span>
+                <span class="legend-value">4.4 KB (0.1%)</span>
             </li>
             
             <li>
@@ -3360,12 +3129,12 @@ body {
         <header>
             <div>
                 <h2>osionos</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.538032+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.947732+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>764</strong></div>
+            <div><span class="label">Commits</span><strong>737</strong></div>
             <div><span class="label">Committers</span><strong>6</strong></div>
             <div><span class="label">Languages</span><strong>13</strong></div>
         </div>
@@ -3376,8 +3145,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 140.979 324.836 L 158.668 259.177 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 414 (54.2%)</title></path><path d="M 140.979 324.836 A 150.000 150.000 0 0 1 41.067 236.547 L 104.050 210.912 A 82.000 82.000 0 0 0 158.668 259.177 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>rstancu: 112 (14.7%)</title></path><path d="M 41.067 236.547 A 150.000 150.000 0 0 1 49.080 106.788 L 108.431 139.977 A 82.000 82.000 0 0 0 104.050 210.912 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 109 (14.3%)</title></path><path d="M 49.080 106.788 A 150.000 150.000 0 0 1 118.914 43.002 L 146.607 105.108 A 82.000 82.000 0 0 0 108.431 139.977 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 78 (10.2%)</title></path><path d="M 118.914 43.002 A 150.000 150.000 0 0 1 177.533 30.020 L 178.651 98.011 A 82.000 82.000 0 0 0 146.607 105.108 Z" fill="hsl(2.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>serjimen: 49 (6.4%)</title></path><path d="M 177.533 30.020 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 178.651 98.011 Z" fill="hsl(139.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>GitHub: 2 (0.3%)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">764</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 136.515 323.558 L 156.228 258.479 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 403 (54.7%)</title></path><path d="M 136.515 323.558 A 150.000 150.000 0 0 1 41.266 237.033 L 104.159 211.178 A 82.000 82.000 0 0 0 156.228 258.479 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>rstancu: 104 (14.1%)</title></path><path d="M 41.266 237.033 A 150.000 150.000 0 0 1 42.513 120.023 L 104.840 147.213 A 82.000 82.000 0 0 0 104.159 211.178 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>danfern3: 94 (12.8%)</title></path><path d="M 42.513 120.023 A 150.000 150.000 0 0 1 107.692 48.579 L 140.472 108.156 A 82.000 82.000 0 0 0 104.840 147.213 Z" fill="hsl(224.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>vjan-nie: 77 (10.4%)</title></path><path d="M 107.692 48.579 A 150.000 150.000 0 0 1 167.227 30.545 L 173.018 98.298 A 82.000 82.000 0 0 0 140.472 108.156 Z" fill="hsl(2.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>serjimen: 49 (6.6%)</title></path><path d="M 167.227 30.545 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 173.018 98.298 Z" fill="hsl(139.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>shashemi: 10 (1.4%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">737</text>
             <text x="180.0" y="196.0" class="pie-center-label">commits</text>
         </svg>
         <ul class="chart-legend">
@@ -3385,37 +3154,37 @@ body {
             <li>
                 <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
                 <span class="legend-name">dlesieur</span>
-                <span class="legend-value">414 (54.2%)</span>
+                <span class="legend-value">403 (54.7%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(309.5, 48%, 42%)"></span>
                 <span class="legend-name">rstancu</span>
-                <span class="legend-value">112 (14.7%)</span>
+                <span class="legend-value">104 (14.1%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(87.0, 48%, 42%)"></span>
                 <span class="legend-name">danfern3</span>
-                <span class="legend-value">109 (14.3%)</span>
+                <span class="legend-value">94 (12.8%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(224.5, 48%, 42%)"></span>
                 <span class="legend-name">vjan-nie</span>
-                <span class="legend-value">78 (10.2%)</span>
+                <span class="legend-value">77 (10.4%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(2.0, 48%, 42%)"></span>
                 <span class="legend-name">serjimen</span>
-                <span class="legend-value">49 (6.4%)</span>
+                <span class="legend-value">49 (6.6%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(139.5, 48%, 42%)"></span>
-                <span class="legend-name">GitHub</span>
-                <span class="legend-value">2 (0.3%)</span>
+                <span class="legend-name">shashemi</span>
+                <span class="legend-value">10 (1.4%)</span>
             </li>
             
         </ul>
@@ -3427,7 +3196,7 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Language usage by bytes of code">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 39.322 232.053 L 103.096 208.456 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="#3178c6" stroke="#fffdf8" stroke-width="2"><title>TypeScript: 5.3 MB (69.4%) (1170 files)</title></path><path d="M 39.322 232.053 A 150.000 150.000 0 0 1 89.684 60.238 L 130.627 114.530 A 82.000 82.000 0 0 0 103.096 208.456 Z" fill="#f1e05a" stroke="#fffdf8" stroke-width="2"><title>JavaScript: 1.6 MB (20.4%) (198 files)</title></path><path d="M 89.684 60.238 A 150.000 150.000 0 0 1 140.867 35.195 L 158.607 100.840 A 82.000 82.000 0 0 0 130.627 114.530 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 475.4 KB (6.1%) (43 files)</title></path><path d="M 140.867 35.195 A 150.000 150.000 0 0 1 159.289 31.437 L 168.678 98.785 A 82.000 82.000 0 0 0 158.607 100.840 Z" fill="#563d7c" stroke="#fffdf8" stroke-width="2"><title>CSS: 156.0 KB (2.0%) (12 files)</title></path><path d="M 159.289 31.437 A 150.000 150.000 0 0 1 168.030 30.478 L 173.456 98.262 A 82.000 82.000 0 0 0 168.678 98.785 Z" fill="#292929" stroke="#fffdf8" stroke-width="2"><title>JSON: 72.9 KB (0.9%) (11 files)</title></path><path d="M 168.030 30.478 A 150.000 150.000 0 0 1 171.977 30.215 L 175.614 98.117 A 82.000 82.000 0 0 0 173.456 98.262 Z" fill="#89e051" stroke="#fffdf8" stroke-width="2"><title>Shell: 32.8 KB (0.4%) (14 files)</title></path><path d="M 171.977 30.215 A 150.000 150.000 0 0 1 174.214 30.112 L 176.837 98.061 A 82.000 82.000 0 0 0 175.614 98.117 Z" fill="#c6538c" stroke="#fffdf8" stroke-width="2"><title>SCSS: 18.6 KB (0.2%) (10 files)</title></path><path d="M 174.214 30.112 A 150.000 150.000 0 0 1 175.831 30.058 L 177.721 98.032 A 82.000 82.000 0 0 0 176.837 98.061 Z" fill="#427819" stroke="#fffdf8" stroke-width="2"><title>Makefile: 13.4 KB (0.2%) (1 files)</title></path><path d="M 175.831 30.058 A 150.000 150.000 0 0 1 177.214 30.026 L 178.477 98.014 A 82.000 82.000 0 0 0 177.721 98.032 Z" fill="#cb171e" stroke="#fffdf8" stroke-width="2"><title>YAML: 11.5 KB (0.1%) (6 files)</title></path><path d="M 177.214 30.026 A 150.000 150.000 0 0 1 178.559 30.007 L 179.212 98.004 A 82.000 82.000 0 0 0 178.477 98.014 Z" fill="#e34c26" stroke="#fffdf8" stroke-width="2"><title>HTML: 11.2 KB (0.1%) (4 files)</title></path><path d="M 178.559 30.007 A 150.000 150.000 0 0 1 179.340 30.001 L 179.639 98.001 A 82.000 82.000 0 0 0 179.212 98.004 Z" fill="#384d54" stroke="#fffdf8" stroke-width="2"><title>Dockerfile: 6.5 KB (0.1%) (7 files)</title></path><path d="M 179.340 30.001 A 150.000 150.000 0 0 1 179.967 30.000 L 179.982 98.000 A 82.000 82.000 0 0 0 179.639 98.001 Z" fill="#9c4221" stroke="#fffdf8" stroke-width="2"><title>TOML: 5.2 KB (0.1%) (6 files)</title></path><path d="M 179.967 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.982 98.000 Z" fill="#e38c00" stroke="#fffdf8" stroke-width="2"><title>SQL: 277 B (0.0%) (1 files)</title></path>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 39.344 232.114 L 103.108 208.489 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="#3178c6" stroke="#fffdf8" stroke-width="2"><title>TypeScript: 5.3 MB (69.4%) (1170 files)</title></path><path d="M 39.344 232.114 A 150.000 150.000 0 0 1 89.671 60.247 L 130.620 114.535 A 82.000 82.000 0 0 0 103.108 208.489 Z" fill="#f1e05a" stroke="#fffdf8" stroke-width="2"><title>JavaScript: 1.6 MB (20.4%) (198 files)</title></path><path d="M 89.671 60.247 A 150.000 150.000 0 0 1 140.835 35.203 L 158.590 100.844 A 82.000 82.000 0 0 0 130.620 114.535 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 475.4 KB (6.1%) (43 files)</title></path><path d="M 140.835 35.203 A 150.000 150.000 0 0 1 159.269 31.439 L 168.667 98.787 A 82.000 82.000 0 0 0 158.590 100.844 Z" fill="#563d7c" stroke="#fffdf8" stroke-width="2"><title>CSS: 156.1 KB (2.0%) (12 files)</title></path><path d="M 159.269 31.439 A 150.000 150.000 0 0 1 168.007 30.480 L 173.444 98.262 A 82.000 82.000 0 0 0 168.667 98.787 Z" fill="#292929" stroke="#fffdf8" stroke-width="2"><title>JSON: 72.9 KB (0.9%) (11 files)</title></path><path d="M 168.007 30.480 A 150.000 150.000 0 0 1 171.953 30.216 L 175.601 98.118 A 82.000 82.000 0 0 0 173.444 98.262 Z" fill="#89e051" stroke="#fffdf8" stroke-width="2"><title>Shell: 32.8 KB (0.4%) (14 files)</title></path><path d="M 171.953 30.216 A 150.000 150.000 0 0 1 174.189 30.113 L 176.823 98.062 A 82.000 82.000 0 0 0 175.601 98.118 Z" fill="#c6538c" stroke="#fffdf8" stroke-width="2"><title>SCSS: 18.6 KB (0.2%) (10 files)</title></path><path d="M 174.189 30.113 A 150.000 150.000 0 0 1 175.806 30.059 L 177.707 98.032 A 82.000 82.000 0 0 0 176.823 98.062 Z" fill="#427819" stroke="#fffdf8" stroke-width="2"><title>Makefile: 13.4 KB (0.2%) (1 files)</title></path><path d="M 175.806 30.059 A 150.000 150.000 0 0 1 177.229 30.026 L 178.485 98.014 A 82.000 82.000 0 0 0 177.707 98.032 Z" fill="#cb171e" stroke="#fffdf8" stroke-width="2"><title>YAML: 11.8 KB (0.2%) (6 files)</title></path><path d="M 177.229 30.026 A 150.000 150.000 0 0 1 178.574 30.007 L 179.220 98.004 A 82.000 82.000 0 0 0 178.485 98.014 Z" fill="#e34c26" stroke="#fffdf8" stroke-width="2"><title>HTML: 11.2 KB (0.1%) (4 files)</title></path><path d="M 178.574 30.007 A 150.000 150.000 0 0 1 179.340 30.001 L 179.639 98.001 A 82.000 82.000 0 0 0 179.220 98.004 Z" fill="#384d54" stroke="#fffdf8" stroke-width="2"><title>Dockerfile: 6.4 KB (0.1%) (7 files)</title></path><path d="M 179.340 30.001 A 150.000 150.000 0 0 1 179.967 30.000 L 179.982 98.000 A 82.000 82.000 0 0 0 179.639 98.001 Z" fill="#9c4221" stroke="#fffdf8" stroke-width="2"><title>TOML: 5.2 KB (0.1%) (6 files)</title></path><path d="M 179.967 30.000 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 179.982 98.000 Z" fill="#e38c00" stroke="#fffdf8" stroke-width="2"><title>SQL: 277 B (0.0%) (1 files)</title></path>
             <text x="180.0" y="170.0" class="pie-center-value">7.6 MB</text>
             <text x="180.0" y="196.0" class="pie-center-label">code</text>
         </svg>
@@ -3454,7 +3223,7 @@ body {
             <li>
                 <span class="legend-swatch" style="background:#563d7c"></span>
                 <span class="legend-name">CSS</span>
-                <span class="legend-value">156.0 KB (2.0%)</span>
+                <span class="legend-value">156.1 KB (2.0%)</span>
             </li>
             
             <li>
@@ -3484,7 +3253,7 @@ body {
             <li>
                 <span class="legend-swatch" style="background:#cb171e"></span>
                 <span class="legend-name">YAML</span>
-                <span class="legend-value">11.5 KB (0.1%)</span>
+                <span class="legend-value">11.8 KB (0.2%)</span>
             </li>
             
             <li>
@@ -3496,7 +3265,7 @@ body {
             <li>
                 <span class="legend-swatch" style="background:#384d54"></span>
                 <span class="legend-name">Dockerfile</span>
-                <span class="legend-value">6.5 KB (0.1%)</span>
+                <span class="legend-value">6.4 KB (0.1%)</span>
             </li>
             
             <li>
@@ -3523,7 +3292,7 @@ body {
         <header>
             <div>
                 <h2>osionos-calendar</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.582744+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.957728+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3626,7 +3395,7 @@ body {
         <header>
             <div>
                 <h2>osionos-canvas</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.617975+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.967399+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3653,7 +3422,7 @@ body {
         <header>
             <div>
                 <h2>osionos-mail</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.631715+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.978246+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3762,7 +3531,7 @@ body {
         <header>
             <div>
                 <h2>osionos-ui</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.652116+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:32.989394+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -3883,12 +3652,12 @@ body {
         <header>
             <div>
                 <h2>prismatica</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.676501+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:33.007704+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>58</strong></div>
+            <div><span class="label">Commits</span><strong>62</strong></div>
             <div><span class="label">Committers</span><strong>2</strong></div>
             <div><span class="label">Languages</span><strong>11</strong></div>
         </div>
@@ -3899,8 +3668,8 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 89.224 60.586 L 130.376 114.720 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 52 (89.7%)</title></path><path d="M 89.224 60.586 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 130.376 114.720 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>serjimen: 6 (10.3%)</title></path>
-            <text x="180.0" y="170.0" class="pie-center-value">58</text>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 52.703 100.655 L 110.411 136.625 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 52 (83.9%)</title></path><path d="M 52.703 100.655 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 110.411 136.625 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>serjimen: 10 (16.1%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">62</text>
             <text x="180.0" y="196.0" class="pie-center-label">commits</text>
         </svg>
         <ul class="chart-legend">
@@ -3908,13 +3677,13 @@ body {
             <li>
                 <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
                 <span class="legend-name">dlesieur</span>
-                <span class="legend-value">52 (89.7%)</span>
+                <span class="legend-value">52 (83.9%)</span>
             </li>
             
             <li>
                 <span class="legend-swatch" style="background:hsl(309.5, 48%, 42%)"></span>
                 <span class="legend-name">serjimen</span>
-                <span class="legend-value">6 (10.3%)</span>
+                <span class="legend-value">10 (16.1%)</span>
             </li>
             
         </ul>
@@ -4010,7 +3779,7 @@ body {
         <header>
             <div>
                 <h2>prismatica-landing</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.715630+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:33.029376+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -4137,7 +3906,7 @@ body {
         <header>
             <div>
                 <h2>realtime-agnostic</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.775684+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:33.055372+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -4153,7 +3922,7 @@ body {
                 
     <div class="chart-layout">
         <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
-            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 172.403 30.193 L 175.847 98.105 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 246 (99.2%)</title></path><path d="M 172.403 30.193 A 150.000 150.000 0 0 1 176.200 30.048 L 177.923 98.026 A 82.000 82.000 0 0 0 175.847 98.105 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>AI Assistant: 1 (0.4%)</title></path><path d="M 176.200 30.048 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 177.923 98.026 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>SMOSTAFAH1: 1 (0.4%)</title></path>
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 172.403 30.193 L 175.847 98.105 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>dlesieur: 246 (99.2%)</title></path><path d="M 172.403 30.193 A 150.000 150.000 0 0 1 176.200 30.048 L 177.923 98.026 A 82.000 82.000 0 0 0 175.847 98.105 Z" fill="hsl(309.5, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>AI Assistant: 1 (0.4%)</title></path><path d="M 176.200 30.048 A 150.000 150.000 0 0 1 180.000 30.000 L 180.000 98.000 A 82.000 82.000 0 0 0 177.923 98.026 Z" fill="hsl(87.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>shashemi: 1 (0.4%)</title></path>
             <text x="180.0" y="170.0" class="pie-center-value">248</text>
             <text x="180.0" y="196.0" class="pie-center-label">commits</text>
         </svg>
@@ -4173,7 +3942,7 @@ body {
             
             <li>
                 <span class="legend-swatch" style="background:hsl(87.0, 48%, 42%)"></span>
-                <span class="legend-name">SMOSTAFAH1</span>
+                <span class="legend-name">shashemi</span>
                 <span class="legend-value">1 (0.4%)</span>
             </li>
             
@@ -4270,7 +4039,7 @@ body {
         <header>
             <div>
                 <h2>scripts</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.814878+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:33.086419+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -4391,24 +4160,58 @@ body {
         <header>
             <div>
                 <h2>storage-router-api</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.830371+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:33.104319+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
         <div class="stats">
-            <div><span class="label">Commits</span><strong>0</strong></div>
-            <div><span class="label">Committers</span><strong>0</strong></div>
-            <div><span class="label">Languages</span><strong>0</strong></div>
+            <div><span class="label">Commits</span><strong>1</strong></div>
+            <div><span class="label">Committers</span><strong>1</strong></div>
+            <div><span class="label">Languages</span><strong>1</strong></div>
         </div>
         
         <div class="repo-charts">
             <div class="chart-panel">
                 <h3>Committers</h3>
-                <p class="empty">No committer counts stored for this repository.</p>
+                
+    <div class="chart-layout">
+        <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Commit counts per committer">
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 180.000 330.000 A 150.000 150.000 0 1 1 180.000 30.000 M 180.000 98.000 A 82.000 82.000 0 1 0 180.000 262.000 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="hsl(172.0, 48%, 42%)" stroke="#fffdf8" stroke-width="2"><title>shashemi: 1 (100.0%)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">1</text>
+            <text x="180.0" y="196.0" class="pie-center-label">commits</text>
+        </svg>
+        <ul class="chart-legend">
+            
+            <li>
+                <span class="legend-swatch" style="background:hsl(172.0, 48%, 42%)"></span>
+                <span class="legend-name">shashemi</span>
+                <span class="legend-value">1 (100.0%)</span>
+            </li>
+            
+        </ul>
+    </div>
+    
             </div>
             <div class="chart-panel">
                 <h3>Languages</h3>
-                <p class="empty">No language data stored for this repository.</p>
+                
+    <div class="chart-layout">
+        <svg viewBox="0 0 360 360" class="pie-chart" role="img" aria-label="Language usage by bytes of code">
+            <path d="M 180.000 30.000 A 150.000 150.000 0 1 1 180.000 330.000 A 150.000 150.000 0 1 1 180.000 30.000 M 180.000 98.000 A 82.000 82.000 0 1 0 180.000 262.000 A 82.000 82.000 0 1 0 180.000 98.000 Z" fill="#083fa1" stroke="#fffdf8" stroke-width="2"><title>Markdown: 21 B (100.0%) (1 files)</title></path>
+            <text x="180.0" y="170.0" class="pie-center-value">21 B</text>
+            <text x="180.0" y="196.0" class="pie-center-label">code</text>
+        </svg>
+        <ul class="chart-legend">
+            
+            <li>
+                <span class="legend-swatch" style="background:#083fa1"></span>
+                <span class="legend-name">Markdown</span>
+                <span class="legend-value">21 B (100.0%)</span>
+            </li>
+            
+        </ul>
+    </div>
+    
             </div>
         </div>
     </section>
@@ -4418,7 +4221,7 @@ body {
         <header>
             <div>
                 <h2>transcendence</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.845673+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:33.124332+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -4569,7 +4372,7 @@ body {
         <header>
             <div>
                 <h2>vault42</h2>
-                <p class="meta">Collected at 2026-09-26T08:13:02.905970+00:00</p>
+                <p class="meta">Collected at 2026-09-27T05:27:33.162640+00:00</p>
             </div>
             <span class="status status-success">Success</span>
         </header>
@@ -4698,7 +4501,7 @@ body {
     </section>
     
 
-        <p class="footer">Generated from /home/danfern3/projects/commit-history-visualizer/commits.sqlite3. Re-run the collector before regenerating the report to refresh the numbers.</p>
+        <p class="footer">Generated from /home/daniel/projects/commit-history-visualizer/commits.sqlite3. Re-run the collector before regenerating the report to refresh the numbers.</p>
     </main>
 </body>
 </html>

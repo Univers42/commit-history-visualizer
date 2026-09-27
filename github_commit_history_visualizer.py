@@ -736,7 +736,6 @@ def render_html(
     contributor_summary_card = render_contributor_summary_card(connection, config)
     report_title = html.escape(config.title)
     report_description = html.escape(config.description)
-    stylesheet = Path(__file__).with_name("report.css").read_text(encoding="utf-8")
 
     return f"""<!doctype html>
 <html lang="en">
@@ -744,9 +743,7 @@ def render_html(
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{report_title}</title>
-    <style>
-{stylesheet}
-    </style>
+    <link rel="stylesheet" href="report.css">
 </head>
 <body>
     <main class="page">

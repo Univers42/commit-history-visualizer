@@ -5,7 +5,7 @@ name = "Transcendence"
 title = "Transcendence Commit History"
 description = "This report visualizes the repository history stored in the SQLite database, with per-repository totals and circular charts for committers and languages."
 database = "commits.sqlite3"
-report = "github_commit_history_report.html"
+report = "report.html"
 
 # Repository names on the remote. Each one is checked out under clone.directory.
 repositories = [
@@ -82,8 +82,8 @@ members = ["danielfdez17"]
 highlight = true
 
 [[groups]]
-name = "SMOSTAFAH1"
-members = []
+name = "shashemi"
+members = ["SMOSTAFAH1", "SEYED MOSTAFA HASHEMIAN", "SEYED MOSTAFA HASHEMIAN (SMH)"]
 highlight = true
 
 [[groups]]
