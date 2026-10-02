@@ -19,6 +19,7 @@ repositories = [
   "drawnosaurus",
   "email-api",
   "formula-engine",
+  "graph_render",
   "grobase",
   "groot",
   "hellish",
