@@ -90,6 +90,51 @@ class CircleChartOptions:
     hue_offset: float = 172.0
 
 
+THEME_BOOT_SCRIPT = """<script>
+(function () {
+    try {
+        var stored = localStorage.getItem("report-theme");
+        if (stored === "light" || stored === "dark") {
+            document.documentElement.setAttribute("data-theme", stored);
+        }
+    } catch (error) {
+        /* Storage can be unavailable; the report stays on the default theme. */
+    }
+})();
+</script>"""
+
+THEME_TOGGLE_SCRIPT = """<script>
+(function () {
+    var root = document.documentElement;
+    var button = document.getElementById("theme-toggle");
+    if (!button) {
+        return;
+    }
+
+    function applyTheme(theme) {
+        var dark = theme !== "light";
+        root.setAttribute("data-theme", dark ? "dark" : "light");
+        button.textContent = dark ? "Light mode" : "Dark mode";
+        button.setAttribute("aria-pressed", dark ? "true" : "false");
+        button.setAttribute(
+            "aria-label",
+            dark ? "Switch to light mode" : "Switch to dark mode"
+        );
+    }
+
+    applyTheme(root.getAttribute("data-theme") === "light" ? "light" : "dark");
+    button.addEventListener("click", function () {
+        var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        applyTheme(next);
+        try {
+            localStorage.setItem("report-theme", next);
+        } catch (error) {
+            /* Ignore unavailable storage and keep the chosen theme for this view. */
+        }
+    });
+})();
+</script>"""
+
 LANGUAGE_COLORS = {
     "Assembly": "#6E4C13",
     "C": "#555555",
@@ -535,7 +580,7 @@ def _chart_piece(
     value_label = html.escape(options.format_value(item.value, percent))
     path = (
         f'<path d="{_donut_slice_path(ring, span.start_angle, span.end_angle)}" '
-        f'fill="{color}" stroke="#fffdf8" stroke-width="2">'
+        f'fill="{color}" stroke="var(--slice-stroke)" stroke-width="2">'
         f"<title>{label}: {options.format_value(item.value, percent)}{detail}</title>"
         "</path>"
     )
@@ -738,17 +783,21 @@ def render_html(
     report_description = html.escape(config.description)
 
     return f"""<!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{report_title}</title>
+    {THEME_BOOT_SCRIPT}
     <link rel="stylesheet" href="report.css">
 </head>
 <body>
     <main class="page">
         <section class="hero">
-            <h1>{report_title}</h1>
+            <div class="hero-bar">
+                <h1>{report_title}</h1>
+                <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="true">Light mode</button>
+            </div>
             <p>{report_description}</p>
         </section>
 
@@ -763,6 +812,7 @@ def render_html(
 
         <p class="footer">Generated from {html.escape(db_path)}. Re-run the collector before regenerating the report to refresh the numbers.</p>
     </main>
+    {THEME_TOGGLE_SCRIPT}
 </body>
 </html>
 """

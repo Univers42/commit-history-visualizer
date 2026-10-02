@@ -1,23 +1,55 @@
-:root {
+:root,
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #10151c;
+    --bg-glow: #1a2836;
+    --bg-deep: #0b0f14;
+    --panel: #1a212b;
+    --panel-muted: #232b36;
+    --ink: #e8eef5;
+    --muted: #9aa8b8;
+    --accent: #5eead4;
+    --accent-ink: #99f6e4;
+    --accent-soft: rgba(45, 212, 191, 0.16);
+    --accent-border: rgba(94, 234, 212, 0.28);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.16);
+    --error: #fca5a5;
+    --error-soft: rgba(248, 113, 113, 0.16);
+    --border: #313b49;
+    --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    --summary-start: #1c2530;
+    --summary-end: #161d26;
+    --slice-stroke: #1a212b;
+}
+:root[data-theme="light"] {
     color-scheme: light;
     --bg: #f5f1e8;
+    --bg-glow: #fff8ea;
+    --bg-deep: #efe7db;
     --panel: #fffdf8;
+    --panel-muted: #faf7f0;
     --ink: #1f2933;
     --muted: #65717e;
     --accent: #0f766e;
+    --accent-ink: #0f766e;
     --accent-soft: #d6f0ec;
+    --accent-border: rgba(15, 118, 110, 0.12);
     --warning: #b45309;
     --warning-soft: #fef3c7;
     --error: #b91c1c;
     --error-soft: #fee2e2;
     --border: #e6ddd0;
     --shadow: 0 20px 45px rgba(31, 41, 51, 0.08);
+    --summary-start: #ffffff;
+    --summary-end: #fffaf1;
+    --slice-stroke: #fffdf8;
 }
 body {
     margin: 0;
     font-family: Georgia, "Times New Roman", serif;
     color: var(--ink);
-    background: radial-gradient(circle at top, #fff8ea 0, var(--bg) 48%, #efe7db 100%);
+    background: radial-gradient(circle at top, var(--bg-glow) 0, var(--bg) 48%, var(--bg-deep) 100%);
 }
 .page {
     max-width: 1180px;
@@ -31,10 +63,35 @@ body {
     padding: 30px 32px;
     box-shadow: var(--shadow);
 }
+.hero-bar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
 .hero h1 {
     margin: 0 0 10px;
     font-size: clamp(2rem, 4vw, 3.6rem);
     letter-spacing: -0.03em;
+}
+.theme-toggle {
+    flex: none;
+    margin-top: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font: inherit;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+.theme-toggle:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
 }
 .hero p {
     margin: 0;
@@ -45,7 +102,7 @@ body {
 .summary-card {
     margin: 18px 0 30px;
     padding: 22px 24px;
-    background: linear-gradient(180deg, #ffffff 0%, #fffaf1 100%);
+    background: linear-gradient(180deg, var(--summary-start) 0%, var(--summary-end) 100%);
     border: 1px solid var(--border);
     border-radius: 22px;
     box-shadow: var(--shadow);
@@ -74,7 +131,7 @@ body {
     padding: 14px 16px;
     border-radius: 18px;
     background: var(--accent-soft);
-    border: 1px solid rgba(15, 118, 110, 0.12);
+    border: 1px solid var(--accent-border);
     text-align: right;
 }
 .summary-total .label {
@@ -86,7 +143,7 @@ body {
     display: block;
     margin-top: 6px;
     font-size: 1.8rem;
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 .summary-chart {
     margin-bottom: 18px;
@@ -116,7 +173,7 @@ body {
 .contributor-list li {
     padding: 14px 16px;
     border-radius: 18px;
-    background: #faf7f0;
+    background: var(--panel-muted);
     border: 1px solid var(--border);
     display: grid;
     gap: 4px;
@@ -141,7 +198,7 @@ body {
     box-shadow: inset 4px 0 0 var(--accent);
 }
 .contributor-list li.highlighted strong {
-    color: var(--accent);
+    color: var(--accent-ink);
 }
 .overview {
     display: grid;
@@ -195,7 +252,7 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.04em;
 }
-.status-success { background: var(--accent-soft); color: var(--accent); }
+.status-success { background: var(--accent-soft); color: var(--accent-ink); }
 .status-error { background: var(--error-soft); color: var(--error); }
 .stats {
     display: grid;
@@ -204,7 +261,7 @@ body {
     margin-bottom: 14px;
 }
 .stats div {
-    background: #faf7f0;
+    background: var(--panel-muted);
     border-radius: 18px;
     padding: 14px 16px;
     border: 1px solid var(--border);
@@ -296,6 +353,8 @@ body {
 }
 @media (max-width: 720px) {
     .hero, .repo-card { padding-left: 18px; padding-right: 18px; }
+    .hero-bar { flex-direction: column; }
+    .theme-toggle { align-self: flex-start; margin-top: 0; }
     .repo-card header { flex-direction: column; }
     .status { align-self: flex-start; }
     .chart-layout {
