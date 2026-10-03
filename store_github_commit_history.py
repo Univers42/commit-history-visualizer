@@ -12,7 +12,6 @@ import argparse
 import sqlite3
 import subprocess
 import sys
-import webbrowser
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -598,7 +597,7 @@ def store_repository(connection: sqlite3.Connection, repository_reference: str) 
 
 def generate_report(db_path: str, report_output: str, config_path: str) -> None:
     """
-    Generate the HTML report by running the visualization script and open it in a browser.
+    Generate the HTML report by running the visualization script.
     """
     report_script = Path(__file__).with_name("github_commit_history_visualizer.py")
     subprocess.run(
@@ -614,7 +613,6 @@ def generate_report(db_path: str, report_output: str, config_path: str) -> None:
         ],
         check=True,
     )
-    webbrowser.open(Path(report_output).resolve().as_uri())
 
 
 def main() -> int:
@@ -664,7 +662,7 @@ def main() -> int:
         generate_report(database_path, report_output, str(config.source))
     except subprocess.CalledProcessError as error:
         print(f"Failed to generate the HTML report: {error}")
-    except (OSError, webbrowser.Error) as error:
+    except (OSError) as error:
         print(f"Failed to open the HTML report in a browser: {error}")
 
     print(

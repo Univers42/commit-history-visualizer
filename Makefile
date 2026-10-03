@@ -107,5 +107,6 @@ update-submodules: ## Update all git submodules
 .PHONY: clean
 clean: ## Clean up cloned repositories
 	@$(call print_banner,Cleaning up generated files)
-	@rm -rf $(TRANSCENDENCE_ROUTE)
+# 	@rm -rf $(TRANSCENDENCE_ROUTE)
+	@rm -rf ./transcendence
 	@$(call print_success,Generated files cleaned up successfully!)
