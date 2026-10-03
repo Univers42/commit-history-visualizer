@@ -33,10 +33,14 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Prepare Pages artifact
+        run: |
+          mkdir -p ./pages
+          cp ./report.html ./pages/report.html
       - name: Upload report.html
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './report.html'
+          path: './pages'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
