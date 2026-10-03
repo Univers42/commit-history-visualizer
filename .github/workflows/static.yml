@@ -36,7 +36,8 @@ jobs:
       - name: Prepare Pages artifact
         run: |
           mkdir -p ./pages
-          cp ./report.html ./pages/report.html
+          cp ./report.html ./pages/index.html
+          cp ./report.css ./pages/report.css
       - name: Upload report.html
         uses: actions/upload-pages-artifact@v3
         with:
