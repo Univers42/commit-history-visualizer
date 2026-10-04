@@ -760,7 +760,6 @@ def render_repository_section(
 def render_html(
     repositories: List[RepositorySummary],
     connection: sqlite3.Connection,
-    db_path: str,
     config: ProjectConfig,
 ) -> str:
     """
@@ -811,7 +810,7 @@ def render_html(
 
         {sections}
 
-        <p class="footer">Generated from {html.escape(db_path)}. Re-run the collector before regenerating the report to refresh the numbers.</p>
+        <p class="footer">Re-run the collector before regenerating the report to refresh the numbers.</p>
     </main>
     {THEME_TOGGLE_SCRIPT}
 </body>
@@ -840,7 +839,7 @@ def main() -> int:
         connection = sqlite3.connect(str(db_path))
         load_schema(connection)
         repositories = load_repositories(connection)
-        html_report = render_html(repositories, connection, str(db_path), config)
+        html_report = render_html(repositories, connection, config)
     except (sqlite3.Error, RuntimeError) as error:
         print(f"Failed to build report: {error}")
         return 1
