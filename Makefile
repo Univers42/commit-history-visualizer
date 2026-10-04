@@ -12,13 +12,8 @@ INFO := $(CYAN)ℹ
 WARN := $(YELLOW)⚠
 
 PRINT_BANNER := ./scripts/bash/print_banner.sh
-
-## README:
-### If you have Python 3.11 or later, you can use the built-in tomllib module to read TOML files.
-TRANSCENDENCE_ROUTE := $(shell python3 -c "import tomllib; print(tomllib.load(open('config.toml', 'rb'))['clone']['directory'])")
-### If you have an earlier version of Python, you can use the tomli module instead.
-# TRANSCENDENCE_ROUTE := $(shell python3 -c 'import tomli; print(tomli.load(open("pyproject.toml", "rb"))["clone"]["directory"])')
-## END OF README
+VENV_DIR := venv
+VENV_PYTHON := $(VENV_DIR)/bin/python
 
 .DEFAULT_GOAL := help
 
@@ -38,7 +33,17 @@ help: ## Show available targets
 		awk 'BEGIN {FS = ":.*## "}; {printf "  $(CYAN)%-35s$(RESET) %s\n", $$1, $$2}'
 	@echo ""
 
-# ── Utils ────────────────────────────────────────────────────────────────
+.PHONY: venv
+venv: ## Create the project virtual environment if needed
+	@if [ ! -x "$(VENV_PYTHON)" ]; then \
+		if ! python3 -m venv "$(VENV_DIR)"; then \
+			echo "Unable to create a Python virtual environment at $(VENV_DIR)." >&2; \
+			echo "Install the venv module for this Python (on Debian/Ubuntu: sudo apt install python3-venv) and run the target again." >&2; \
+			exit 1; \
+		fi; \
+		"$(VENV_PYTHON)" -m pip install --disable-pip-version-check -r requirements.txt; \
+	fi
+
 .PHONY: clone-repositories
 clone-repositories: ## Clone the repositories listed in config.toml
 	@$(PRINT_BANNER) "Cloning Repositories"
@@ -47,15 +52,14 @@ clone-repositories: ## Clone the repositories listed in config.toml
 
 .PHONY: generate-report
 generate-report: ## Collect commit history for the repositories in config.toml
-# 	@$(MAKE) -s clone-repositories
 	@$(PRINT_BANNER) "Collecting Git Commit History"
 	@./create_commit_history.sh
 	@$(call print_success,Git commit history collected successfully!)
 
 .PHONY: lint
-lint: ## Lint all Python scripts in the repository
+lint: venv ## Lint all Python scripts in the repository
 	@$(PRINT_BANNER) "Linting Python Scripts"
-	@./scripts/python/lint_python_scripts.py
+	@$(VENV_PYTHON) -m compileall clone_repositories.py project_config.py store_github_commit_history.py github_commit_history_visualizer.py
 	@$(call print_success,Python scripts linted successfully!)
 
 .PHONY: update-submodules
@@ -64,8 +68,7 @@ update-submodules: ## Update all git submodules
 	@./scripts/bash/update_submodules.sh
 
 .PHONY: clean
-clean: ## Clean up cloned repositories
+clean: ## Clean up generated repositories and local virtual environment
 	@$(PRINT_BANNER) "Cleaning up generated files"
-# 	@rm -rf $(TRANSCENDENCE_ROUTE)
-	@rm -rf ./transcendence
+	@rm -rf ./transcendence $(VENV_DIR)
 	@$(call print_success,Generated files cleaned up successfully!)
