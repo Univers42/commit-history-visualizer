@@ -624,7 +624,7 @@ def main() -> int:
     try:
         config = load_config(Path(args.config) if args.config else None)
         repositories = collect_input_repositories(args, config)
-    except (FileNotFoundError, ValueError, OSError) as error:
+    except (ValueError, OSError) as error:
         print(error)
         return 1
 

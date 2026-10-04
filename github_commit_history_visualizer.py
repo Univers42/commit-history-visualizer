@@ -788,6 +788,7 @@ def render_html(
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{report_title}</title>
+    <link rel="icon" type="image/svg+xml" href="42_logo.png">
     {THEME_BOOT_SCRIPT}
     <link rel="stylesheet" href="report.css">
 </head>
@@ -825,7 +826,7 @@ def main() -> int:
     args = parse_args()
     try:
         config = load_config(Path(args.config) if args.config else None)
-    except (FileNotFoundError, ValueError, OSError) as error:
+    except (ValueError, OSError) as error:
         print(error)
         return 1
 
