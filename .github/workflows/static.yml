@@ -6,6 +6,10 @@ on:
   push:
     branches: ["main"]
 
+  # Runs every day at 09:00 UTC
+  schedule:
+    - cron: "0 9 * * *"
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -33,6 +37,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Clone repositories
+        run: make clone-repositories
+      - name: Generate report
+        run: make generate-report
       - name: Prepare Pages artifact
         run: |
           mkdir -p ./pages
