@@ -1,32 +1,40 @@
 # Transcendence Commit History Report
 
-This project is a tool to generate a report of the commit history of the ft_transcendence project.
+This project generates a report of the commit history for the ft_transcendence repositories.
+
+## Prerequisites
+
+- Python 3.10 or newer
+- Git
+- Make
 
 ## Usage
 
-### Create the virtual environment
+The Makefile automatically creates and uses a local project virtual environment when a target needs Python. Contributors do not need to activate it manually for the standard Make targets.
+
 ```bash
-python3 -m venv myvenv
+make help
+make lint
+make clone-repositories
+make generate-report
+make clean
 ```
 
-### Activate the virtual environment
+### Optional manual setup
+
+If you prefer to work in a virtual environment manually:
+
 ```bash
-source ./myvenv/bin/activate
+python3 -m venv venv
+source ./venv/bin/activate
+python -m pip install -r requirements.txt
 ```
 
-### Install the requirements
-```bash
-python3 -m pip install -r requirements.txt
-```
-
-### Clone the repository list from the [config.toml](config.toml)
-```bash
-make collect-git-commit-history
-```
+The project already contains venv-aware shell entrypoints for repository cloning and report generation, so the Makefile delegates to those instead of duplicating the environment setup.
 
 ## Configuration
 
-Read the `config.toml` file to configure the repositories to collect commit history from.
+Read the [config.toml](config.toml) file to configure which repositories are cloned and how the report is generated.
 
 ## License
 
