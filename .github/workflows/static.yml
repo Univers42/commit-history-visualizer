@@ -38,7 +38,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Updating submodules
-        run: make update-submodules
+        run: make update-submodules || git submodule update --init --recursive
       - name: Clone repositories
         run: make clone-repositories
       - name: Generate report
