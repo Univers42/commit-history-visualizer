@@ -46,6 +46,7 @@ jobs:
           mkdir -p ./pages
           cp ./report.html ./pages/index.html
           cp ./report.css ./pages/report.css
+          cp ./42_logo.png ./pages/42_logo.png
       - name: Upload report.html
         uses: actions/upload-pages-artifact@v3
         with:
