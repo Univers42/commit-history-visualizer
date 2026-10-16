@@ -15,7 +15,7 @@ repositories = [
   "cc1",
   "draw-engine",
   "drawnosaurus",
-  "feature-flags"
+  "feature-flags",
   "formula-engine",
   "graph_render",
   "grobase",
