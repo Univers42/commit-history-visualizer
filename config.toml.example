@@ -1,0 +1,26 @@
+# Settings for one commit-history project. Paths are relative to this file.
+# Point the tools at another file with --config.
+
+name = "Example name"
+title = "Commit History"
+description = "Gimme a useful description"
+database = "store_me_where_you_want.sqlite3"
+report = "report.html"
+
+# Repository names on the remote. Each one is checked out under clone.directory.
+repositories = [
+]
+
+[clone]
+remote = "" # "https://github.com/" 
+directory = "./repositories"
+branch = "main"
+
+# People who commit under more than one name. The group name is always matched,
+# and members add further aliases. Matching is case-insensitive.
+# highlight = true marks the group in the Contributor Summary.
+[[groups]]
+name = "dev1"
+members = ["dev1", "devOne"]
+highlight = true
+
