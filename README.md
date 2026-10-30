@@ -34,7 +34,7 @@ The project already contains venv-aware shell entrypoints for repository cloning
 
 ## Configuration
 
-Read the [config.toml](config.toml) file to configure which repositories are cloned and how the report is generated.
+Read the [config.toml.example](config.toml.example) file to configure which repositories are cloned and how the report is generated.
 
 ## License
 
